@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}" lang="en">
+<head>
+  <title>Confirm Booking - Supertails</title>
+  <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/health.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="booking-confirm-wrap">
+
+    <h2 class="booking-confirm-title">Confirm your booking</h2>
+
+    <div class="booking-summary-card">
+      <div class="booking-row">
+        <span class="booking-label">Service</span>
+        <span class="booking-value" th:text="${serviceName}">Consultation</span>
+      </div>
+      <div class="booking-row">
+        <span class="booking-label">Category</span>
+        <span class="booking-value" th:text="${serviceCategory}">General</span>
+      </div>
+      <div class="booking-row">
+        <span class="booking-label">Clinic</span>
+        <span class="booking-value" th:text="${clinicName}">Supertails, Koramangala</span>
+      </div>
+      <div class="booking-row">
+        <span class="booking-label">Address</span>
+        <span class="booking-value" th:text="${clinicAddress}">156, 1st Cross Road...</span>
+      </div>
+      <div class="booking-row booking-price-row">
+        <span class="booking-label">Price</span>
+        <span class="booking-price" th:text="'₹' + ${price}">₹399</span>
+      </div>
+    </div>
+
+    <form method="post" th:action="@{/booking/submit}">
+      <input type="hidden" name="serviceName"     th:value="${serviceName}"/>
+      <input type="hidden" name="serviceCategory" th:value="${serviceCategory}"/>
+      <input type="hidden" name="price"           th:value="${price}"/>
+      <input type="hidden" name="clinicName"      th:value="${clinicName}"/>
+      <input type="hidden" name="clinicAddress"   th:value="${clinicAddress}"/>
+
+      <button type="submit" class="btn-confirm-booking">Confirm &amp; Reserve</button>
+    </form>
+
+    <a th:href="@{/category/dog/health(section='clinic')}"
+       class="booking-back-link">← Go back</a>
+
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog - Essentials</title>
+
+     <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/buttons.css}"/>
+  <link rel="stylesheet" th:href="@{/css/products.css}"/>
+    <link rel="stylesheet" th:href="@{/css/category.css}"/>
+</head>
+<body>
+
+   <div layout:fragment="content">
+
+    <!-- ── Hero Banner ──
+  <section class="cat-hero dog-hero">
+    <div class="cat-hero-text">
+      <p class="cat-hero-sub">BIG SALE</p>
+      <h1>Who Said <span>Treats?</span></h1>
+      <p class="cat-hero-desc">
+        Up to <strong>50% OFF</strong> on dog food, treats &amp; more
+      </p>
+      <a th:href="@{/products(keyword=dog)}" class="btn btn-brand">Shop Now →</a>
+    </div>
+    <div class="cat-hero-img">
+      <img th:src="@{/images/dog-hero.png}"
+           alt="Dog Hero"
+           onerror="this.style.display='none'"/>
+    </div>
+  </section> -->
+
+  <!-- ── Quick Nav Pills ── -->
+  <section class="quick-nav">
+    <a th:href="@{/products(keyword='dog food')}"     class="qnav-pill">🍖 Food</a>
+    <a th:href="@{/products(keyword='dog pharmacy')}" class="qnav-pill">💊 Pharmacy</a>
+    <a th:href="@{/products(keyword='dog clinic')}"   class="qnav-pill">🏥 Clinics</a>
+    <a th:href="@{/products(keyword='dog treats')}"   class="qnav-pill">🦴 Treats</a>
+    <a th:href="@{/products(keyword='dog grooming')}" class="qnav-pill">✂️ Grooming</a>
+    <a th:href="@{/products(keyword='dog fashion')}"  class="qnav-pill">👗 Fashion</a>
+    <a th:href="@{/products(keyword='dog toys')}"     class="qnav-pill">🎾 Toys</a>
+  </section>
+
+  <!-- ── Coupon Bar ── -->
+  <div class="coupon-bar">
+    Get <strong>15% OFF</strong> on your first order &nbsp;|&nbsp;
+    Coupon code: <span class="coupon-code">NEW15</span>
+  </div>
+
+
+   <div class="shop-layout">
+<!-- ─── Sidebar ─── -->
+    <aside class="shop-sidebar">
+      <div style="display:flex;align-items:center;
+                  justify-content:space-between;margin-bottom:1rem;">
+        <span style="font-weight:700;font-size:0.95rem;">FILTERS</span>
+        <a th:href="@{/products}"
+           style="font-size:0.8rem;color:var(--brand);font-weight:600;">
+          Hide ✕
+        </a>
+      </div>
+
+      <!-- Price Range -->
+    <div class="filter-group">
+    <p class="filter-group-title">Price</p>
+    <input type="range" id="price-range-slider"
+           min="0" max="25000"
+           th:value="${maxPrice}"
+           style="width:100%;accent-color:var(--brand);"/>
+    <div style="display:flex;justify-content:space-between;
+                font-size:0.75rem;color:var(--text-muted);margin-top:4px;">
+        <span>₹0</span>
+        <span id="price-max-label"
+              th:text="'₹' + ${#numbers.formatInteger(maxPrice, 0, 'COMMA')}">₹25,000</span>
+    </div>
+
+    <!-- hidden inputs to preserve current URL params -->
+    <input type="hidden" id="currentSection" th:value="${section}"/>
+    <input type="hidden" id="currentCategoryId" th:value="${selectedCategory}"/>
+</div>
+
+      <!-- Breed Size -->
+     <div class="filter-group">
+  <p class="filter-group-title">Breed Size</p>
+
+  <label class="filter-check">
+    <input type="checkbox" name="breedSize" value="Medium"
+           th:checked="${param.breedSize != null and param.breedSize.contains('Medium')}"/>
+    <span>Medium</span>
+    <span class="filter-count"
+      th:text="'(' + ${breedCountMap['Medium'] ?: 0} + ')'"></span>
+  </label>
+
+  <label class="filter-check">
+    <input type="checkbox" name="breedSize" value="Maxi"
+           th:checked="${param.breedSize != null and param.breedSize.contains('Maxi')}"/>
+    <span>Maxi</span>
+   <span class="filter-count"
+      th:text="'(' + ${breedCountMap['Maxi'] ?: 0} + ')'"></span>
+  </label>
+
+  <label class="filter-check">
+    <input type="checkbox" name="breedSize" value="Mini"
+           th:checked="${param.breedSize != null and param.breedSize.contains('Mini')}"/>
+    <span>Mini</span>
+    <span class="filter-count"
+          th:text="'(' + ${breedCountMap['Mini'] ?: 0} + ')'"></span>
+  </label>
+      </div>
+
+      <!-- Veg / Non-Veg -->
+      <div class="filter-group">
+  <p class="filter-group-title">Veg/Non-Veg
+    <span class="filter-arrow">▾</span>
+  </p>
+     <label class="filter-check">
+  <input type="checkbox" name="foodType" value="Non-Veg"
+         th:checked="${param.foodType != null and param.foodType.contains('Non-Veg')}"/>
+  <span>Non-Veg</span>
+  <span class="filter-count"
+        th:text="'(' + ${foodCountMap['Non-Veg'] ?: 0} + ')'"></span>
+</label>
+
+<label class="filter-check">
+  <input type="checkbox" name="foodType" value="Veg"
+         th:checked="${param.foodType != null and param.foodType.contains('Veg')}"/>
+  <span>Veg</span>
+  <span class="filter-count"
+        th:text="'(' + ${foodCountMap['Veg'] ?: 0} + ')'"></span>
+</label>
+      </div> 
+
+
+      <!-- Pet Type -->
+      <div class="filter-group">
+  <p class="filter-group-title">Pet Type</p>
+
+  <label class="filter-check">
+    <input type="checkbox" name="petType" value="Dogs"
+           th:checked="${param.petType != null and param.petType.contains('Dogs')}"/>
+    <span>Dogs</span>
+    <span class="filter-count"
+          th:text="'(' + ${petTypeCountMap['Dogs'] ?: 0} + ')'"></span>
+  </label>
+
+  <label class="filter-check">
+    <input type="checkbox" name="petType" value="Cats"
+           th:checked="${param.petType != null and param.petType.contains('Cats')}"/>
+    <span>Cats</span>
+    <span class="filter-count"
+          th:text="'(' + ${petTypeCountMap['Cats'] ?: 0} + ')'"></span>
+  </label>
+</div>
+
+      <!-- Brand -->
+      <div class="filter-group">
+  <p class="filter-group-title">Brand</p>
+
+  <label class="filter-check" th:each="entry : ${brandCountMap}">
+    <input type="checkbox" name="brand"
+           th:value="${entry.key}"
+           th:checked="${param.brand != null and param.brand.contains(entry.key)}"/>
+
+    <span th:text="${entry.key}">Brand</span>
+
+    <span class="filter-count"
+          th:text="'(' + ${entry.value} + ')'"></span>
+  </label>
+
+</div>
+
+    </aside>
+
+
+ <!-- ─── Main Content ─── -->
+    <div class="shop-main">
+
+<!-- Level 2: Treats Sub Pills -->
+<div class="food-type-pills" th:if="${section == 'treats'}">
+  <a th:href="@{/category/dog/essentials(section='treats')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentialall.jpg}" onerror="this.src='/images/placeholder.png'" alt="All Treats"/>
+     <span>All</span></a>
+  <a th:href="@{/category/dog/essentials(section='treats', categoryId=14)}"
+     th:classappend="${selectedCategory == 14} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/treats/jerky/henlo-chicken-jerky.jpg}" onerror="this.src='/images/placeholder.png'" alt="Jerky Treats"/>
+     <span>Jerky</span></a>
+  <a th:href="@{/category/dog/essentials(section='treats', categoryId=15)}"
+     th:classappend="${selectedCategory == 15} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/treats/biscuits-cookies/pedigree-biscrok-chicken.jpg}" onerror="this.src='/images/placeholder.png'" alt="Biscuits and Cookies"/>
+     <span>Biscuits &amp; Cookies</span></a>
+  <a th:href="@{/category/dog/essentials(section='treats', categoryId=16)}"
+     th:classappend="${selectedCategory == 16} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/treats/bones-chews/drools-calcium-bone-pouch.jpg}" onerror="this.src='/images/placeholder.png'" alt="Bones and Chews"/>
+     <span>Bones &amp; Chews</span></a>
+  <a th:href="@{/category/dog/essentials(section='treats', categoryId=17)}"
+     th:classappend="${selectedCategory == 17} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/treats/creamy/woof-brew-ice-paw-pops.jpg}" onerror="this.src='/images/placeholder.png'" alt="Creamy Treats"/>
+     <span>Creamy</span></a>
+  <a th:href="@{/category/dog/essentials(section='treats', categoryId=18)}"
+     th:classappend="${selectedCategory == 18} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/treats/dental/bol-grain-free-chicken-dental-chews.jpg}" onerror="this.src='/images/placeholder.png'" alt="Dental Treats"/>
+     <span>Dental</span></a>
+  <a th:href="@{/category/dog/essentials(section='treats', categoryId=19)}"
+     th:classappend="${selectedCategory == 19} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/treats/veg/purepet-veg-biscuit.jpg}" onerror="this.src='/images/placeholder.png'" alt="Veg Treats"/>
+     <span>Veg</span></a>
+</div>
+
+<!-- Level 2: Supplements Sub Pills -->
+<div class="food-type-pills" th:if="${section == 'supplements'}">
+  <a th:href="@{/category/dog/essentials(section='supplements')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentialall.jpg}" onerror="this.src='/images/placeholder.png'" alt="All Supplements"/>
+     <span>All</span></a>
+  <a th:href="@{/category/dog/essentials(section='supplements', categoryId=8)}"
+     th:classappend="${selectedCategory == 8} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/vitaminsupplements.jpg}" onerror="this.src='/images/placeholder.png'" alt="Vitamin Supplement"/>
+     <span>Vitamin Supplement</span></a>
+  <a th:href="@{/category/dog/essentials(section='supplements', categoryId=9)}"
+     th:classappend="${selectedCategory == 9} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/skin&coatsupplement.jpg}" onerror="this.src='/images/placeholder.png'" alt="Skin and Coat Supplement"/>
+     <span>Skin &amp; Coat</span></a>
+  <a th:href="@{/category/dog/essentials(section='supplements', categoryId=10)}"
+     th:classappend="${selectedCategory == 10} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/jointsupplement.jpg}" onerror="this.src='/images/placeholder.png'" alt="Joint Supplement"/>
+     <span>Joint Supplement</span></a>
+  <a th:href="@{/category/dog/essentials(section='supplements', categoryId=11)}"
+     th:classappend="${selectedCategory == 11} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/calciumsupplement.jpg}" onerror="this.src='/images/placeholder.png'" alt="Calcium Supplement"/>
+     <span>Calcium Supplement</span></a>
+  <a th:href="@{/category/dog/essentials(section='supplements', categoryId=12)}"
+     th:classappend="${selectedCategory == 12} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/antianxiety.jpg}" onerror="this.src='/images/placeholder.png'" alt="Anti Anxiety Supplement"/>
+     <span>Anti Anxiety</span></a>
+  <a th:href="@{/category/dog/essentials(section='supplements', categoryId=13)}"
+     th:classappend="${selectedCategory == 13} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/gutsupplement.jpg}" onerror="this.src='/images/placeholder.png'" alt="Gut Supplement"/>
+     <span>Gut Supplement</span></a>
+</div>
+
+<!-- Level 2: Baked Food Sub Pills -->
+<div class="food-type-pills" th:if="${section == 'baked'}">
+  <a th:href="@{/category/dog/essentials(section='baked')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentialall.jpg}" onerror="this.src='/images/placeholder.png'" alt="All Baked Food"/>
+     <span>All</span></a>
+  <a th:href="@{/category/dog/essentials(section='baked', categoryId=20)}"
+     th:classappend="${selectedCategory == 20} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/baked/henlo/henlo-chicken-strips.jpg}" onerror="this.src='/images/placeholder.png'" alt="Henlo Baked Food"/>
+     <span>Henlo</span></a>
+  <a th:href="@{/category/dog/essentials(section='baked', categoryId=21)}"
+     th:classappend="${selectedCategory == 21} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/baked/newlaunch/henlo-chicken-strips.jpg}" onerror="this.src='/images/placeholder.png'" alt="New Launch Baked Food"/>
+     <span>New Launch</span></a>
+  <a th:href="@{/category/dog/essentials(section='baked', categoryId=22)}"
+     th:classappend="${selectedCategory == 22} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/baked/dry/henlo-baked-chicken-rice.jpg}" onerror="this.src='/images/placeholder.png'" alt="Baked Dry Food"/>
+     <span>Dry Food</span></a>
+  <a th:href="@{/category/dog/essentials(section='baked', categoryId=23)}"
+     th:classappend="${selectedCategory == 23} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/baked/nutrition/henlo-everyday-topper.jpg}" onerror="this.src='/images/placeholder.png'" alt="Nutrition Topper"/>
+     <span>Nutrition Topper</span></a>
+  <a th:href="@{/category/dog/essentials(section='baked', categoryId=24)}"
+     th:classappend="${selectedCategory == 24} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/baked/trialpack/henlo-chicken-veg-baked-trial.jpg}" onerror="this.src='/images/placeholder.png'" alt="Baked Trial Pack"/>
+     <span>Trial Pack</span></a>
+  <a th:href="@{/category/dog/essentials(section='baked', categoryId=25)}"
+     th:classappend="${selectedCategory == 25} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/baked/exclusive/henlo-chicken-veg-egg-combo.jpg}" onerror="this.src='/images/placeholder.png'" alt="Baked Exclusive Combo"/>
+     <span>Exclusive Combo</span></a>
+</div>
+
+<!-- Level 2: Fresh Food Sub Pills -->
+<div class="food-type-pills" th:if="${section == 'fresh'}">
+  <a th:href="@{/category/dog/essentials(section='fresh')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentialall.jpg}" onerror="this.src='/images/placeholder.png'" alt="All Fresh Food"/>
+     <span>All</span></a>
+  <a th:href="@{/category/dog/essentials(section='fresh', categoryId=26)}"
+     th:classappend="${selectedCategory == 26} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/fresh/homie&ginger/homiee-ginger-grain-free-air-dried.jpg}" onerror="this.src='/images/placeholder.png'" alt="Homiee and Ginger Fresh Food"/>
+     <span>Homies And Ginger</span></a>
+  <a th:href="@{/category/dog/essentials(section='fresh', categoryId=27)}"
+     th:classappend="${selectedCategory == 27} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/fresh/huft/huft-saras-lamb-apple-wet.jpg}" onerror="this.src='/images/placeholder.png'" alt="Huft Fresh Food"/>
+     <span>Huft</span></a>
+  <a th:href="@{/category/dog/essentials(section='fresh', categoryId=28)}"
+     th:classappend="${selectedCategory == 28} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/fresh/doggs/doggs-jumbo-monster-chicken-pumpkin.jpg}" onerror="this.src='/images/placeholder.png'" alt="Doggs Fresh Food"/>
+     <span>Doggs</span></a>
+  <a th:href="@{/category/dog/essentials(section='fresh', categoryId=29)}"
+     th:classappend="${selectedCategory == 29} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/fresh/bennysbowl/bennys-bowl-lamb-french-beans.jpg}" onerror="this.src='/images/placeholder.png'" alt="Bennys Bowl Fresh Food"/>
+     <span>Bennys Bowl</span></a>
+  <a th:href="@{/category/dog/essentials(section='fresh', categoryId=30)}"
+     th:classappend="${selectedCategory == 30} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/fresh/newlaunch/homiee-ginger-power-bowl.jpg}" onerror="this.src='/images/placeholder.png'" alt="New Launch Fresh Food"/>
+     <span>New Launch</span></a>
+  <a th:href="@{/category/dog/essentials(section='fresh', categoryId=31)}"
+     th:classappend="${selectedCategory == 31} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/fresh/freshpaws/fresh-for-paws-cottage-cheese.jpg}" onerror="this.src='/images/placeholder.png'" alt="Fresh For Paws"/>
+     <span>Fresh For Paws</span></a>
+</div>
+
+<!-- Level 2: Premium Food Sub Pills -->
+<div class="food-type-pills" th:if="${section == 'premium'}">
+  <a th:href="@{/category/dog/essentials(section='premium')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentialall.jpg}" onerror="this.src='/images/placeholder.png'" alt="All Premium Food"/>
+     <span>All</span></a>
+  <a th:href="@{/category/dog/essentials(section='premium', categoryId=32)}"
+     th:classappend="${selectedCategory == 32} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/premium/dry/fidele-plus-large-puppy.jpg}" onerror="this.src='/images/placeholder.png'" alt="Premium Dry Food"/>
+     <span>Dry Food</span></a>
+  <a th:href="@{/category/dog/essentials(section='premium', categoryId=33)}"
+     th:classappend="${selectedCategory == 33} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/premium/wet/royal-canin-maxi-adult-wet.jpg}" onerror="this.src='/images/placeholder.png'" alt="Premium Wet Food"/>
+     <span>Wet Food</span></a>
+  <a th:href="@{/category/dog/essentials(section='premium', categoryId=34)}"
+     th:classappend="${selectedCategory == 34} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/premium/newlaunch/kennel-kitchen-chicken-pumpkin-turmeric.jpg}" onerror="this.src='/images/placeholder.png'" alt="Premium New Launch"/>
+     <span>New Launch</span></a>
+  <a th:href="@{/category/dog/essentials(section='premium', categoryId=35)}"
+     th:classappend="${selectedCategory == 35} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/premium/pedigree/pedigree-pro-expert-nutrition-large-breed.jpg}" onerror="this.src='/images/placeholder.png'" alt="Pedigree Pro Premium Food"/>
+     <span>Pedigree Pro</span></a>
+  <a th:href="@{/category/dog/essentials(section='premium', categoryId=36)}"
+     th:classappend="${selectedCategory == 36} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/premium/adult/royal-canin-maxi-adult-dry.jpg}" onerror="this.src='/images/placeholder.png'" alt="Premium Adult Food"/>
+     <span>Adult Food</span></a>
+  <a th:href="@{/category/dog/essentials(section='premium', categoryId=37)}"
+     th:classappend="${selectedCategory == 37} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/essentials/premium/royal/royal-canin-mini-adult-dry.jpg}" onerror="this.src='/images/placeholder.png'" alt="Royal Canin Premium Food"/>
+     <span>Royal Canin</span></a>
+</div>
+
+      <!-- Product Count -->
+      <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;"
+         th:text="${products.size()} + ' products'">0 products</p>
+
+      <!-- Product Grid -->
+      <div th:if="${products.empty}"
+           style="text-align:center;padding:3rem;color:var(--text-muted);">
+        <p style="font-size:3rem;">🔍</p>
+        <p>No products found. Try a different filter.</p>
+        <a th:href="@{/products}" class="btn btn-brand"
+           style="margin-top:1rem;display:inline-block;">
+          Browse All
+        </a>
+      </div>
+
+      <div th:unless="${products.empty}" class="product-grid">
+        <div th:each="product : ${products}" class="product-card"     
+        >
+
+          <a th:href="@{/products/{id}(id=${product.id})}">
+            <div class="product-img-wrap img-bg-purple">
+              <img th:if="${product.imageUrl != null}"
+                    th:src="@{${product.imageUrl}}"
+                    th:alt="${product.name}"
+                    onerror="this.src='/images/placeholder.png'"/>
+                   
+              <span th:if="${product.imageUrl == null}"
+                    class="product-img-placeholder">🐾</span>
+
+                 
+            </div>
+             
+            <div class="product-body">
+              <span class="product-tag tag-food"
+                    th:text="${product.category?.name}">Tag</span>
+              <p class="product-name" th:text="${product.name}">Name</p>
+              <p class="product-price"
+                 th:text="'₹' + ${product.price}">₹0</p>
+            </div>
+          </a>
+
+          <div style="padding:0 1rem 1rem;">
+            <form method="post" th:action="@{/cart/add}">
+              <input type="hidden" name="productId" th:value="${product.id}"/>
+             
+              <button type="submit"
+                      class="btn-add btn-add-purple"
+                      style="width:100%;">
+                Add to cart
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+</div>
+
+</div>
+
+<!-- ========================================scripts for filters===================================== -->
+
+<script th:src="@{/js/sidebar.js}" defer></script>
+
+
+</body>
+</html>

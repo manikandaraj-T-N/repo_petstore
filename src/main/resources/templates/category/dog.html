@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dogs</title>
+  <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/buttons.css}"/>
+  <link rel="stylesheet" th:href="@{/css/products.css}"/>
+  <link rel="stylesheet" th:href="@{/css/category.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+
+  <!-- ── Hero Banner ── -->
+  <section class="cat-hero dog-hero">
+    <div class="cat-hero-text">
+      <p class="cat-hero-sub">BIG SALE</p>
+      <h1>Who Said <span>Treats?</span></h1>
+      <p class="cat-hero-desc">
+        Up to <strong>50% OFF</strong> on dog food, treats &amp; more
+      </p>
+      <a th:href="@{/products(keyword=dog)}" class="btn btn-brand">Shop Now →</a>
+    </div>
+    <div class="cat-hero-img">
+      <img th:src="@{/images/dog-hero.png}"
+           alt="Dog Hero"
+           onerror="this.style.display='none'"/>
+    </div>
+  </section>
+
+  <!-- ── Quick Nav Pills ── -->
+  <section class="quick-nav">
+    <a th:href="@{/products(keyword='dog food')}"     class="qnav-pill">🍖 Food</a>
+    <a th:href="@{/products(keyword='dog pharmacy')}" class="qnav-pill">💊 Pharmacy</a>
+    <a th:href="@{/products(keyword='dog clinic')}"   class="qnav-pill">🏥 Clinics</a>
+    <a th:href="@{/products(keyword='dog treats')}"   class="qnav-pill">🦴 Treats</a>
+    <a th:href="@{/products(keyword='dog grooming')}" class="qnav-pill">✂️ Grooming</a>
+    <a th:href="@{/products(keyword='dog fashion')}"  class="qnav-pill">👗 Fashion</a>
+    <a th:href="@{/products(keyword='dog toys')}"     class="qnav-pill">🎾 Toys</a>
+  </section>
+
+  <!-- ── Coupon Bar ── -->
+  <div class="coupon-bar">
+    Get <strong>15% OFF</strong> on your first order &nbsp;|&nbsp;
+    Coupon code: <span class="coupon-code">NEW15</span>
+  </div>
+
+  <!-- ── Shop by Breed ── -->
+  <section class="section">
+    <h2 class="section-title">Shop by Breed</h2>
+    <div class="breed-grid">
+      <a th:href="@{/products(breed='golden retriever')}" class="breed-card">
+        <img th:src="@{/images/category/dogs/dog-1.jpg}"
+             alt="Golden Retriever"
+             onerror="this.src='/images/placeholder.png'"/>
+        <span>Golden Retriever</span>
+      </a>
+      <a th:href="@{/products(breed='shih tzu')}" class="breed-card">
+        <img th:src="@{/images/category/dogs/dog-2.jpg}"
+             alt="Shih Tzu"
+             onerror="this.src='/images/placeholder.png'"/>
+        <span>Shih Tzu</span>
+      </a>
+      <a th:href="@{/products(breed=labrador)}" class="breed-card">
+        <img th:src="@{/images/category/dogs/dog-3.jpg}"
+             alt="Labrador"
+             onerror="this.src='/images/placeholder.png'"/>
+        <span>Labrador</span>
+      </a>
+      <a th:href="@{/products(breed='german shepherd')}" class="breed-card">
+        <img th:src="@{/images/category/dogs/dog-4.jpg}"
+             alt="German Shepherd"
+             onerror="this.src='/images/placeholder.png'"/>
+        <span>German Shepherd</span>
+      </a>
+     
+    
+    
+      <a th:href="@{/products(breed=pug)}" class="breed-card">
+        <img th:src="@{/images/category/dogs/dog-8.jpg}"
+             alt="Pug"
+             onerror="this.src='/images/placeholder.png'"/>
+        <span>Pug</span>
+      </a>
+    </div>
+  </section>
+
+<!-- ── Food Essentials ── -->
+<section class="section">
+  <h2 class="section-title">Food Essentials</h2>
+  <div class="sub-cat-grid">
+
+    <a th:href="@{/products(categoryId=1)}" class="sub-cat-card">
+      <div class="sub-cat-img">
+        <img th:src="@{/images/category/dogs/dry-food.jpg}" onerror="this.src='/images/placeholder.png'" alt="Dry food"/>
+      </div>
+      <span>Dry food</span>
+    </a>
+
+    <a th:href="@{/products(categoryId=2)}" class="sub-cat-card">
+      <div class="sub-cat-img">
+        <img th:src="@{/images/category/dogs/wet-food.jpg}" onerror="this.src='/images/placeholder.png'" alt="Wet food"/>
+      </div>
+      <span>Wet food</span>
+    </a>
+
+    <a th:href="@{/category/dog/essentials(section='treats')}" class="sub-cat-card">
+  <div class="sub-cat-img">
+    <img th:src="@{/images/category/dogs/treats.jpg}" onerror="this.src='/images/placeholder.png'" alt="Treats"/>
+  </div>
+  <span>Treats</span>
+      </a>
+
+  <a th:href="@{/category/dog/essentials(section='supplements')}" class="sub-cat-card">
+  <div class="sub-cat-img">
+    <img th:src="@{/images/category/dogs/supplements.jpg}" onerror="this.src='/images/placeholder.png'" alt="Supplements"/>
+  </div>
+  <span>Supplements</span>
+      </a>
+
+  <a th:href="@{/category/dog/essentials(section='baked')}" class="sub-cat-card">
+  <div class="sub-cat-img">
+    <img th:src="@{/images/category/dogs/baked.jpg}" onerror="this.src='/images/placeholder.png'" alt="Baked food"/>
+  </div>
+  <span>Baked food</span>
+      </a>
+
+  <a th:href="@{/category/dog/essentials(section='fresh')}" class="sub-cat-card">
+  <div class="sub-cat-img">
+    <img th:src="@{/images/category/dogs/fresh.jpg}" onerror="this.src='/images/placeholder.png'" alt="Fresh food"/>
+  </div>
+  <span>Fresh food</span>
+      </a>
+
+  <a th:href="@{/category/dog/essentials(section='premium')}" class="sub-cat-card">
+  <div class="sub-cat-img">
+    <img th:src="@{/images/category/dogs/premium.jpg}" onerror="this.src='/images/placeholder.png'" alt="Premium food"/>
+  </div>
+  <span>Premium food</span>
+      </a>
+  </div>
+</section>
+
+  <!-- ── Fashion & Lifestyle ── -->
+  <section class="section">
+    <h2 class="section-title">Fashion &amp; Lifestyle</h2>
+    <div class="sub-cat-grid">
+      <a th:href="@{/category/dog/fashion(section='boots')}"    class="sub-cat-card"><img th:src="@{/images/category/dogs/fas-1.jpg}"    onerror="this.src='/images/placeholder.png'" alt="Boots"/><span>Boots &amp; Socks</span></a>
+      <a th:href="@{/category/dog/fashion(section='clothes')}"  class="sub-cat-card"><img th:src="@{/images/category/dogs/fas-2.jpg}"  onerror="this.src='/images/placeholder.png'" alt="Clothes"/><span>Clothes &amp; Costumes</span></a>
+      <a th:href="@{/category/dog/fashion(section='chewtoys')}"    class="sub-cat-card"><img th:src="@{/images/category/dogs/fas-3.jpg}"     onerror="this.src='/images/placeholder.png'" alt="Chew"/><span>Chew Toys</span></a>
+      <a th:href="@{/category/dog/fashion(section='shampoo')}"  class="sub-cat-card"><img th:src="@{/images/category/dogs/fas-4.jpg}"  onerror="this.src='/images/placeholder.png'" alt="Shampoo"/><span>Shampoo &amp; Conditioner</span></a>
+      <a  th:href="@{/category/dog/fashion(section='harness')}"  class="sub-cat-card"><img th:src="@{/images/category/dogs/fas-5.jpg}"  onerror="this.src='/images/placeholder.png'" alt="Harness"/><span>Harnesses &amp; Belts</span></a>
+      <a th:href="@{/category/dog/fashion(section='diapers')}"     class="sub-cat-card"><img th:src="@{/images/category/dogs/fas-6.jpg}"     onerror="this.src='/images/placeholder.png'" alt="Toys"/><span>Draggers &amp; Pulls</span></a>
+      <a th:href="@{/category/dog/fashion(section='ethnic')}"   class="sub-cat-card"><img th:src="@{/images/category/dogs/fas-7.jpg}"   onerror="this.src='/images/placeholder.png'" alt="Ethnic"/><span>Ethnic wear</span></a>
+      <a th:href="@{/category/dog/fashion(section='beds')}"     class="sub-cat-card"><img th:src="@{/images/category/dogs/fas-8.jpg}"     onerror="this.src='/images/placeholder.png'" alt="Beds"/><span>Beds</span></a>
+    </div>
+  </section>
+
+
+  <!-- ── Healthcare ── -->
+<section class="section">
+  <h2 class="section-title">Healthcare</h2>
+  <div class="sub-cat-grid">
+    <a th:href="@{/category/dog/health(section='clinic')}"    class="sub-cat-card"><img th:src="@{/images/category/dogs/h-1.jpg}" onerror="this.src='/images/placeholder.png'" alt="Clinic"/><span>Supertails care</span></a>
+    <a th:href="@{/category/dog/health(section='skincare', categoryId=69)}"  class="sub-cat-card"><img th:src="@{/images/category/dogs/h-2.jpg}" onerror="this.src='/images/placeholder.png'" alt="Skin"/><span>Skin care</span></a>
+    <a th:href="@{/category/dog/health(section='dewormer', categoryId=70)}"  class="sub-cat-card"><img th:src="@{/images/category/dogs/h-3.jpg}" onerror="this.src='/images/placeholder.png'" alt="Dewormer"/><span>Dewormer</span></a>
+    <a th:href="@{/category/dog/health(section='tickflea', categoryId=71)}"  class="sub-cat-card"><img th:src="@{/images/category/dogs/h-4.jpg}" onerror="this.src='/images/placeholder.png'" alt="Tick"/><span>Tick &amp; Flea</span></a>
+    <a th:href="@{/category/dog/health(section='jointcare', categoryId=72)}" class="sub-cat-card"><img th:src="@{/images/category/dogs/h-5.jpg}" onerror="this.src='/images/placeholder.png'" alt="Joint"/><span>Joint care</span></a>
+    <a th:href="@{/category/dog/health(section='kidneycare', categoryId=73)}"class="sub-cat-card"><img th:src="@{/images/category/dogs/h-6.jpg}" onerror="this.src='/images/placeholder.png'" alt="Kidney"/><span>Kidney care</span></a>
+    <a th:href="@{/category/dog/health(section='cardiac', categoryId=74)}"   class="sub-cat-card"><img th:src="@{/images/category/dogs/h-7.jpg}" onerror="this.src='/images/placeholder.png'" alt="Cardiac"/><span>Cardiac care</span></a>
+    <a th:href="@{/category/dog/health(section='combos', categoryId=75)}"    class="sub-cat-card"><img th:src="@{/images/category/dogs/h-8.jpg}" onerror="this.src='/images/placeholder.png'" alt="Combos"/><span>Combos</span></a>
+  </div>
+</section>
+
+<!-- ── Pet Parent ──
+<section class="section">
+  <h2 class="section-title">PET PARENT</h2>
+  <div class="sub-cat-grid">
+
+    <a th:href="@{/category/dog/petparent(section='tshirts')}" class="sub-cat-card pet-parent-card">
+      <div class="pp-img-wrap"><img th:src="@{/images/category/dogs/p-1.jpg}" onerror="this.src='/images/placeholder.png'" alt="Tshirts"/></div>
+      <span>Tshirts</span>
+    </a>
+
+    <a th:href="@{/category/dog/petparent(section='keychains')}" class="sub-cat-card pet-parent-card">
+      <div class="pp-img-wrap"><img th:src="@{/images/category/dogs/p-2.jpg}" onerror="this.src='/images/placeholder.png'" alt="Key Chains"/></div>
+      <span>Key Chains</span>
+    </a>
+
+    <a th:href="@{/category/dog/petparent(section='charms')}" class="sub-cat-card pet-parent-card">
+      <div class="pp-img-wrap"><img th:src="@{/images/category/dogs/p-3.jpg}" onerror="this.src='/images/placeholder.png'" alt="Charms"/></div>
+      <span>Charms</span>
+    </a>
+
+    <a th:href="@{/category/dog/petparent(section='coasters')}" class="sub-cat-card pet-parent-card">
+      <div class="pp-img-wrap"><img th:src="@{/images/category/dogs/p-4.jpg}" onerror="this.src='/images/placeholder.png'" alt="Coasters"/></div>
+      <span>Coasters</span>
+    </a>
+
+    <a th:href="@{/category/dog/petparent(section='accessories')}" class="sub-cat-card pet-parent-card">
+      <div class="pp-img-wrap"><img th:src="@{/images/category/dogs/p-5.jpg}" onerror="this.src='/images/placeholder.png'" alt="Accessories"/></div>
+      <span>Accessories</span>
+    </a>
+
+    <a th:href="@{/category/dog/petparent(section='mugs')}" class="sub-cat-card pet-parent-card">
+      <div class="pp-img-wrap"><img th:src="@{/images/category/dogs/p-6.jpg}" onerror="this.src='/images/placeholder.png'" alt="Mugs"/></div>
+      <span>Mugs</span>
+    </a>
+
+    <a th:href="@{/category/dog/petparent(section='plants')}" class="sub-cat-card pet-parent-card">
+      <div class="pp-img-wrap"><img th:src="@{/images/category/dogs/p-7.jpg}" onerror="this.src='/images/placeholder.png'" alt="Pet-safe plants"/></div>
+      <span>Pet-safe plants</span>
+    </a>
+
+    <a th:href="@{/category/dog/petparent(section='carry')}" class="sub-cat-card pet-parent-card">
+      <div class="pp-img-wrap"><img th:src="@{/images/category/dogs/p-8.jpg}" onerror="this.src='/images/placeholder.png'" alt="Everyday carry"/></div>
+      <span>Everyday carry</span>
+    </a>
+
+  </div>
+</section> -->
+
+
+<!-- ── Pet Parent ── -->
+<section class="section">
+  <h2 class="section-title">PET PARENT</h2>
+  <div class="sub-cat-grid">
+
+    <a th:href="@{/category/dog/petparent(section='tshirts', categoryId=76)}" class="sub-cat-card pet-parent-card">
+      <div class="pp-img-wrap"><img th:src="@{/images/category/dogs/p-1.jpg}" onerror="this.src='/images/placeholder.png'" alt="Tshirts"/></div>
+      <span>Tshirts</span>
+    </a>
+
+    <a th:href="@{/category/dog/petparent(section='keychains', categoryId=77)}" class="sub-cat-card pet-parent-card">
+      <div class="pp-img-wrap"><img th:src="@{/images/category/dogs/p-2.jpg}" onerror="this.src='/images/placeholder.png'" alt="Key Chains"/></div>
+      <span>Key Chains</span>
+    </a>
+
+    <a th:href="@{/category/dog/petparent(section='charms', categoryId=78)}" class="sub-cat-card pet-parent-card">
+      <div class="pp-img-wrap"><img th:src="@{/images/category/dogs/p-3.jpg}" onerror="this.src='/images/placeholder.png'" alt="Charms"/></div>
+      <span>Charms</span>
+    </a>
+
+    <a th:href="@{/category/dog/petparent(section='coasters', categoryId=79)}" class="sub-cat-card pet-parent-card">
+      <div class="pp-img-wrap"><img th:src="@{/images/category/dogs/p-4.jpg}" onerror="this.src='/images/placeholder.png'" alt="Coasters"/></div>
+      <span>Coasters</span>
+    </a>
+
+    <a th:href="@{/category/dog/petparent(section='accessories', categoryId=80)}" class="sub-cat-card pet-parent-card">
+      <div class="pp-img-wrap"><img th:src="@{/images/category/dogs/p-5.jpg}" onerror="this.src='/images/placeholder.png'" alt="Accessories"/></div>
+      <span>Accessories</span>
+    </a>
+
+    <a th:href="@{/category/dog/petparent(section='mugs', categoryId=81)}" class="sub-cat-card pet-parent-card">
+      <div class="pp-img-wrap"><img th:src="@{/images/category/dogs/p-6.jpg}" onerror="this.src='/images/placeholder.png'" alt="Mugs"/></div>
+      <span>Mugs</span>
+    </a>
+
+    <a th:href="@{/category/dog/petparent(section='plants', categoryId=82)}" class="sub-cat-card pet-parent-card">
+      <div class="pp-img-wrap"><img th:src="@{/images/category/dogs/p-7.jpg}" onerror="this.src='/images/placeholder.png'" alt="Pet-safe plants"/></div>
+      <span>Pet-safe plants</span>
+    </a>
+
+    <a th:href="@{/category/dog/petparent(section='carry', categoryId=83)}" class="sub-cat-card pet-parent-card">
+      <div class="pp-img-wrap"><img th:src="@{/images/category/dogs/p-8.jpg}" onerror="this.src='/images/placeholder.png'" alt="Everyday carry"/></div>
+      <span>Everyday carry</span>
+    </a>
+
+  </div>
+</section>
+
+</div>
+</body>
+</html>

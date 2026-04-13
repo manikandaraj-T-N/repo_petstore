@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{fragments/layout}"
+      lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Supertails</title>
+
+  <!-- CSS links -->
+  <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/buttons.css}"/>
+  <link rel="stylesheet" th:href="@{/css/auth.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+
+  <div class="auth-wrapper">
+
+    <!-- ─── Left: Form Card ─── -->
+    <div class="auth-card">
+
+      <div class="auth-logo">🐾</div>
+      <h2 class="auth-title">Welcome Back</h2>
+      <p class="auth-subtitle">Login to your Supertails account</p>
+
+      <!-- Alerts -->
+      <div th:if="${errorMsg}"
+           class="alert alert-error"
+           th:text="${errorMsg}"></div>
+
+      <div th:if="${logoutMsg}"
+           class="alert alert-success"
+           th:text="${logoutMsg}"></div>
+
+      <div th:if="${param.registered}"
+           class="alert alert-success">
+        ✅ Registered successfully! Please login.
+      </div>
+
+      <div th:if="${param.expired}"
+           class="alert alert-error">
+        ⏰ Session expired. Please login again.
+      </div>
+
+      <!-- Login Form -->
+      <form method="post" th:action="@{/login}" class="auth-form">
+       
+        <!-- <input type="hidden" name="redirect" th:value="${param.redirect}" /> -->
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="username">Email Address</label>
+          <input type="email"
+                 id="username"
+                 name="username"
+                 placeholder="you@example.com"
+                 required
+                 autofocus/>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <div class="input-eye">
+            <input type="password"
+                   id="loginPassword"
+                   name="password"
+                   placeholder="Enter your password"
+                   required/>
+            <span class="eye-toggle"
+                  onclick="togglePassword('loginPassword', this)">👁</span>
+          </div>
+        </div>
+
+        <!-- Forgot password link -->
+        <div style="text-align:right;margin-top:-0.5rem;">
+          <a href="#"
+             style="font-size:0.8rem;color:var(--brand);font-weight:600;">
+            Forgot password?
+          </a>
+        </div>
+
+        <button type="submit" class="btn-auth">Login →</button>
+
+      </form>
+
+      <!-- Divider -->
+      <div style="display:flex;align-items:center;gap:1rem;
+                  margin:1rem 0;color:var(--text-muted);font-size:0.82rem;">
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+        or
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+      </div>
+
+      <!-- Register switch -->
+      <p class="auth-switch">
+        Don't have an account?
+        <a th:href="@{/register}">Register here</a>
+      </p>
+
+    </div>
+
+    <!-- ─── Right: Side Panel ─── -->
+    <div class="auth-panel">
+      <div class="auth-panel-content">
+        <h2>Shop for your furry friend 🐾</h2>
+        <ul>
+          <li> Premium pet food &amp; treats</li>
+          <li> Vet consultations online</li>
+          <li> Fast doorstep delivery</li>
+          <li> Exclusive member offers</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- JS for password toggle -->
+<th:block layout:fragment="scripts">
+  <script th:src="@{/js/navbar.js}"></script>
+</th:block>
+
+</body>
+</html>

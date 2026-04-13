@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="'Order #' + ${order.id} + ' - Supertails'">Order Detail</title>
+  <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/orders.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+<div class="order-detail-wrap">
+
+  <!-- Success Banner -->
+  <div th:if="${success}"
+       style="background:#d1fae5;border:1px solid #86efac;border-radius:12px;
+              padding:1rem 1.25rem;margin-bottom:1.5rem;
+              display:flex;align-items:center;gap:12px;">
+    <span style="font-size:1.5rem;">🎉</span>
+    <div>
+      <p style="font-weight:700;color:#166534;">Order Placed Successfully!</p>
+      <p style="font-size:0.85rem;color:#166534;">We'll confirm your order shortly.</p>
+    </div>
+  </div>
+
+  <a th:href="@{/orders}"
+     style="font-size:0.85rem;color:var(--brand);font-weight:600;">
+    ← Back to My Orders
+  </a>
+
+  <div style="display:flex;align-items:center;gap:1rem;margin:1rem 0;">
+    <h1 style="font-size:1.4rem;font-weight:800;color:var(--dark);"
+        th:text="'Order #' + ${order.id}">Order</h1>
+    <span th:text="${order.status}"
+          th:class="'badge badge-' + ${order.status.name().toLowerCase()}">
+      PENDING
+    </span>
+  </div>
+
+  <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.5rem;"
+     th:text="'Placed on: ' + ${#temporals.format(order.placedAt, 'dd MMM yyyy, hh:mm a')}">
+    Date
+  </p>
+
+  <div class="order-detail-grid">
+
+    <!-- Left Column -->
+    <div>
+
+      <!-- Tracking Bar -->
+      <div th:if="${order.status.name() != 'CANCELLED'}" class="tracking-wrap">
+        <h3>Order Tracking</h3>
+        <div class="tracking-bar">
+          <div th:each="entry : ${trackingSteps}"
+               th:class="${entry.value} ? 'tracking-step done' : 'tracking-step'">
+            <div class="tracking-dot">✓</div>
+            <span class="tracking-label" th:text="${entry.key}">Step</span>
+          </div>
+        </div>
+      </div>
+
+      <div th:if="${order.status.name() == 'CANCELLED'}"
+           style="background:#fee2e2;border-radius:10px;padding:1rem;
+                  margin-bottom:1.5rem;color:#991b1b;font-weight:600;">
+        ❌ This order was cancelled.
+      </div>
+
+      <!-- Order Items -->
+      <div class="order-items-card">
+        <h3>🛍 Items Ordered</h3>
+        <div th:each="item : ${order.items}" class="order-item-row">
+          <img th:if="${item.product.imageUrl != null}"
+               th:src="${item.product.imageUrl}"
+               onerror="this.src='/images/placeholder.png'"
+               style="width:48px;height:48px;object-fit:contain;
+                      border-radius:8px;background:#f5f3ff;padding:4px;
+                      flex-shrink:0;"/>
+          <span class="order-item-name" th:text="${item.product.name}">Product</span>
+          <span class="order-item-qty"
+                th:text="'x' + ${item.quantity}">x1</span>
+          <span class="order-item-price"
+                th:text="'₹' + ${#numbers.formatDecimal(item.priceAtPurchase * item.quantity, 1, 2)}">
+            ₹0
+          </span>
+        </div>
+
+        <!-- Total row -->
+        <div style="display:flex;justify-content:space-between;
+                    padding:1rem 1.25rem;border-top:2px solid var(--border);">
+          <span style="font-weight:700;color:var(--dark);">Total Paid</span>
+          <span style="font-weight:800;font-size:1.1rem;color:var(--brand);"
+                th:text="'₹' + ${#numbers.formatDecimal(order.totalAmount, 1, 2)}">
+            ₹0
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column -->
+    <div>
+
+      <!-- Shipping -->
+      <div class="shipping-card" style="margin-bottom:1rem;">
+        <h3>📦 Shipping Address</h3>
+        <p class="shipping-address" th:text="${order.shippingAddress}">Address</p>
+      </div>
+
+      <!-- Order Meta -->
+      <div class="shipping-card">
+        <h3>📋 Order Info</h3>
+        <table style="width:100%;font-size:0.85rem;border-collapse:collapse;">
+          <tr>
+            <td style="color:var(--text-muted);padding:4px 0;">Order ID</td>
+            <td style="font-weight:600;text-align:right;"
+                th:text="'#' + ${order.id}">#1</td>
+          </tr>
+          <tr>
+            <td style="color:var(--text-muted);padding:4px 0;">Status</td>
+            <td style="font-weight:600;text-align:right;"
+                th:text="${order.status}">PENDING</td>
+          </tr>
+          <tr>
+            <td style="color:var(--text-muted);padding:4px 0;">Items</td>
+            <td style="font-weight:600;text-align:right;"
+                th:text="${order.items.size()} + ' item(s)'">1 item(s)</td>
+          </tr>
+          <tr>
+            <td style="color:var(--text-muted);padding:4px 0;">Payment</td>
+            <td style="font-weight:600;text-align:right;">Cash on Delivery</td>
+          </tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div style="display:flex;gap:1rem;margin-top:1.5rem;">
+    <a th:href="@{/orders}"
+       style="flex:1;text-align:center;padding:0.85rem;
+              border:1.5px solid var(--brand);color:var(--brand);
+              border-radius:10px;font-weight:600;font-size:0.9rem;">
+      My Orders
+    </a>
+    <a th:href="@{/}"
+       style="flex:1;text-align:center;padding:0.85rem;
+              background:var(--brand);color:white;
+              border-radius:10px;font-weight:600;font-size:0.9rem;">
+      Continue Shopping
+    </a>
+  </div>
+
+</div>
+</div>
+</body>
+</html>

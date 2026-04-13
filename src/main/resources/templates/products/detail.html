@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="${product.name} + ' - Supertails'">Product</title>
+  <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/buttons.css}"/>
+  <link rel="stylesheet" th:href="@{/css/products.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+
+  <div class="product-detail-wrap">
+
+    <!-- ─── Image ─── -->
+    <div class="product-detail-img"
+         th:classappend="${product.type?.name() == 'FOOD'}    ? ' img-bg-amber' :
+                        (${product.type?.name() == 'SERVICE'} ? ' img-bg-green' :
+                                                                 ' img-bg-purple')">
+      <img th:if="${product.imageUrl != null}"
+           th:src="${product.imageUrl}"
+           th:alt="${product.name}"
+           onerror="this.style.display='none'"/>
+      <span th:if="${product.imageUrl == null}"
+            style="font-size:8rem;">🐾</span>
+    </div>
+
+    <!-- ─── Info ─── -->
+    <div class="product-detail-info">
+
+      <!-- Tag + Category -->
+      <div>
+        <span class="product-tag"
+              th:text="${product.category?.name}"
+              th:classappend="${product.type?.name() == 'FOOD'}    ? ' tag-food'    :
+                             (${product.type?.name() == 'SERVICE'} ? ' tag-service' :
+                                                                      ' tag-dog')">
+          Tag
+        </span>
+      </div>
+
+      <h1 class="product-detail-name" th:text="${product.name}">Name</h1>
+
+      <p class="product-detail-desc"
+         th:text="${product.description != null} ? ${product.description} : 'No description available.'">
+        Description
+      </p>
+
+      <p class="product-detail-price" th:text="'₹' + ${product.price}">₹0</p>
+
+      <!-- Stock Badge -->
+      <span class="stock-badge"
+            th:classappend="${product.stock > 0} ? ' stock-in' : ' stock-out'"
+            th:text="${product.stock > 0} ? 'In Stock (' + ${product.stock} + ' left)' : 'Out of Stock'">
+        Stock
+      </span>
+
+      <!-- Add to Cart Form -->
+      <form th:if="${product.stock > 0}"
+            method="post" th:action="@{/cart/add}"
+            style="display:flex;align-items:center;gap:1rem;margin-top:0.5rem;">
+        <input type="hidden" name="productId" th:value="${product.id}"/>
+      
+
+        <div class="qty-selector">
+          <label>Qty</label>
+          <input type="number" name="quantity"
+                 value="1" min="1"
+                 th:max="${product.stock}"/>
+        </div>
+
+        <button type="submit"
+                class="btn btn-brand"
+                th:text="${product.type?.name() == 'SERVICE'} ? 'Book Now' : 'Add to Cart'">
+          Add to Cart
+        </button>
+      </form>
+
+      <!-- Back link -->
+      <a th:href="@{/products}"
+         style="display:inline-flex;align-items:center;gap:6px;
+                color:var(--brand);font-weight:600;font-size:0.88rem;margin-top:1rem;">
+        ← Back to Shop
+      </a>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

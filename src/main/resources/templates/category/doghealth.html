@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dog Healthcare - Supertails</title>
+  <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/buttons.css}"/>
+  <link rel="stylesheet" th:href="@{/css/products.css}"/>
+  <link rel="stylesheet" th:href="@{/css/category.css}"/>
+  <link rel="stylesheet" th:href="@{/css/health.css}"/>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+  <div class="shop-layout">
+
+    <!-- ─── Sidebar ─── -->
+  <aside class="shop-sidebar">
+  <div style="display:flex;align-items:center;
+              justify-content:space-between;margin-bottom:1rem;">
+    <span style="font-weight:700;font-size:0.95rem;">FILTERS</span>
+    <a th:href="@{/category/dog/health}"
+       style="font-size:0.8rem;color:var(--brand);font-weight:600;">
+      Hide ✕
+    </a>
+  </div>
+
+  <!-- Hidden inputs to preserve URL params -->
+  <input type="hidden" id="currentSection" th:value="${section}"/>
+  <input type="hidden" id="currentCategoryId" th:value="${selectedCategory}"/>
+
+  <!-- Price Range -->
+  <div class="filter-group">
+    <p class="filter-group-title">Price</p>
+    <input type="range" id="price-range-slider" min="0" max="5000"
+           th:value="${maxPrice}"
+           style="width:100%;accent-color:var(--brand);"/>
+    <div style="display:flex;justify-content:space-between;
+                font-size:0.75rem;color:var(--text-muted);margin-top:4px;">
+      <span>₹0</span>
+      <span id="price-max-label"
+            th:text="'₹' + ${#numbers.formatInteger(maxPrice, 0, 'COMMA')}">₹5,000</span>
+    </div>
+  </div>
+
+  <!-- Brand Filter -->
+  <div class="filter-group">
+    <p class="filter-group-title">Brand</p>
+    <label class="filter-check" th:each="entry : ${brandCountMap}">
+      <input type="checkbox" name="brand"
+             th:value="${entry.key}"
+             th:checked="${param.brand != null and param.brand.contains(entry.key)}"/>
+      <span th:text="${entry.key}">Brand</span>
+      <span class="filter-count"
+            th:text="'(' + ${entry.value} + ')'"></span>
+    </label>
+  </div>
+
+  <!-- Category Filter -->
+  <div class="filter-group">
+    <p class="filter-group-title">Category
+      <span class="filter-arrow">▾</span>
+    </p>
+    <label class="filter-check">
+      <input type="checkbox"/>
+      <a th:href="@{/category/dog/health(section='clinic')}"
+         style="color:var(--text-secondary);">Supertails+ Clinic</a>
+    </label>
+    <label class="filter-check">
+      <input type="checkbox"
+             th:checked="${section == 'skincare'}"/>
+      <a th:href="@{/category/dog/health(section='skincare', categoryId=69)}"
+         style="color:var(--text-secondary);">Skin Care</a>
+    </label>
+    <label class="filter-check">
+      <input type="checkbox"
+             th:checked="${section == 'dewormer'}"/>
+      <a th:href="@{/category/dog/health(section='dewormer', categoryId=70)}"
+         style="color:var(--text-secondary);">Dewormer</a>
+    </label>
+    <label class="filter-check">
+      <input type="checkbox"
+             th:checked="${section == 'tickflea'}"/>
+      <a th:href="@{/category/dog/health(section='tickflea', categoryId=71)}"
+         style="color:var(--text-secondary);">Tick &amp; Fleas</a>
+    </label>
+    <label class="filter-check">
+      <input type="checkbox"
+             th:checked="${section == 'jointcare'}"/>
+      <a th:href="@{/category/dog/health(section='jointcare', categoryId=72)}"
+         style="color:var(--text-secondary);">Joint Care</a>
+    </label>
+    <label class="filter-check">
+      <input type="checkbox"
+             th:checked="${section == 'kidneycare'}"/>
+      <a th:href="@{/category/dog/health(section='kidneycare', categoryId=73)}"
+         style="color:var(--text-secondary);">Kidney Care</a>
+    </label>
+    <label class="filter-check">
+      <input type="checkbox"
+             th:checked="${section == 'cardiac'}"/>
+      <a th:href="@{/category/dog/health(section='cardiac', categoryId=74)}"
+         style="color:var(--text-secondary);">Cardiac Care</a>
+    </label>
+    <label class="filter-check">
+      <input type="checkbox"
+             th:checked="${section == 'combos'}"/>
+      <a th:href="@{/category/dog/health(section='combos', categoryId=75)}"
+         style="color:var(--text-secondary);">Combos</a>
+    </label>
+  </div>
+</aside>
+    <!-- ─── Main Content ─── -->
+    <div class="shop-main">
+
+
+      <div class="shop-main">
+
+  <!-- ─── All Health Products (section == null) ─── -->
+  <div th:if="${section == null}">
+
+    <div th:if="${products.empty}"
+         style="text-align:center;padding:3rem;color:var(--text-muted);">
+      <p style="font-size:3rem;">🔍</p>
+      <p>No products found.</p>
+    </div>
+
+    <p th:unless="${products.empty}"
+       style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;"
+       th:text="${products.size()} + ' products'">0 products</p>
+
+    <div th:unless="${products.empty}" class="product-grid">
+      <div th:each="product : ${products}" class="product-card">
+        <a th:href="@{/products/{id}(id=${product.id})}">
+          <div class="product-img-wrap img-bg-green">
+            <img th:if="${product.imageUrl != null}"
+                 th:src="${product.imageUrl}"
+                 th:alt="${product.name}"
+                 onerror="this.src='/images/placeholder.png'"/>
+            <span th:if="${product.imageUrl == null}"
+                  class="product-img-placeholder">💊</span>
+          </div>
+          <div class="product-body">
+            <span class="product-tag tag-pharma"
+                  th:text="${product.category?.name}">Tag</span>
+            <p class="product-name" th:text="${product.name}">Name</p>
+            <p class="product-price" th:text="'₹' + ${product.price}">₹0</p>
+          </div>
+        </a>
+        <div style="padding:0 1rem 1rem;">
+          <form method="post" th:action="@{/cart/add}">
+            <input type="hidden" name="productId" th:value="${product.id}"/>
+            <button type="submit" class="btn-add btn-add-green" style="width:100%;">
+              Add to cart
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+ <!-- ─── Clinic Booking Page ─── -->
+<div th:if="${section == 'clinic'}">
+  <div class="clinic-booking-wrap">
+
+    <!-- Left: Progress Steps -->
+    <div class="clinic-steps">
+      <div class="clinic-step active">
+        <div class="step-dot active-dot"></div>
+        <span>Select Clinic</span>
+      </div>
+      <div class="clinic-step-line"></div>
+      <div class="clinic-step">
+        <div class="step-dot"></div>
+        <span>Consultation</span>
+      </div>
+      <div class="clinic-step-line"></div>
+      <div class="clinic-step">
+        <div class="step-dot"></div>
+        <span>Select slot</span>
+      </div>
+      <div class="clinic-step-line"></div>
+      <div class="clinic-step">
+        <div class="step-dot"></div>
+        <span>Pet Info</span>
+      </div>
+      <div class="clinic-step-line"></div>
+      <div class="clinic-step">
+        <div class="step-dot"></div>
+        <span>Overview</span>
+      </div>
+    </div>
+
+    <!-- Right: All clinic content -->
+    <div class="clinic-main-content">
+
+      <!-- Care at Clinic Header -->
+      <div class="clinic-hero">
+        <div class="clinic-hero-text">
+          <h2 class="clinic-hero-title">Care At Clinic</h2>
+          <span class="clinic-city-badge">Exclusively in Bangalore</span>
+        </div>
+        <a th:href="@{/category/dog/health(section='clinic')}" class="btn-book-now">Book now</a>
+      </div>
+
+      <!-- Service Filter Pills -->
+      <div class="clinic-filter-row">
+        <button class="clinic-filter-pill active" onclick="filterServices('all', this)">All</button>
+        <button class="clinic-filter-pill" onclick="filterServices('general', this)">General</button>
+        <button class="clinic-filter-pill" onclick="filterServices('preventive', this)">Preventive</button>
+        <button class="clinic-filter-pill" onclick="filterServices('grooming', this)">Grooming</button>
+        <button class="clinic-filter-pill" onclick="filterServices('surgical', this)">Surgical</button>
+        <button class="clinic-filter-pill" onclick="filterServices('diagnostic', this)">Diagnostic</button>
+      </div>
+
+   <!-- Services Grid -->
+<div class="clinic-services-grid" id="servicesGrid">
+  <div class="clinic-service-card" data-cat="general" data-name="Consultation" data-price="399">
+    <div class="svc-img"><img th:src="@{/images/category/dogs/health/consultation.jpg}" onerror="this.src='/images/placeholder.png'" alt="Consultation"/></div>
+    <div class="svc-label"><span class="svc-price">from ₹399</span></div>
+  </div>
+  <div class="clinic-service-card" data-cat="preventive" data-name="Vaccination" data-price="499">
+    <div class="svc-img"><img th:src="@{/images/category/dogs/health/vaccination.jpg}" onerror="this.src='/images/placeholder.png'" alt="Vaccination"/></div>
+    <div class="svc-label"><span class="svc-price">from ₹499</span></div>
+  </div>
+  <div class="clinic-service-card" data-cat="grooming" data-name="Grooming" data-price="699">
+    <div class="svc-img"><img th:src="@{/images/category/dogs/health/grooming.jpg}" onerror="this.src='/images/placeholder.png'" alt="Grooming"/></div>
+    <div class="svc-label"><span class="svc-price">from ₹699</span></div>
+  </div>
+  <div class="clinic-service-card" data-cat="preventive" data-name="Deworming" data-price="299">
+    <div class="svc-img"><img th:src="@{/images/category/dogs/health/deworming.jpg}" onerror="this.src='/images/placeholder.png'" alt="Deworming"/></div>
+    <div class="svc-label"><span class="svc-price">from ₹299</span></div>
+  </div>
+  <div class="clinic-service-card" data-cat="surgical" data-name="Surgery" data-price="2999">
+    <div class="svc-img"><img th:src="@{/images/category/dogs/health/surgery.jpg}" onerror="this.src='/images/placeholder.png'" alt="Surgery"/></div>
+    <div class="svc-label"><span class="svc-price">from ₹2,999</span></div>
+  </div>
+  <div class="clinic-service-card" data-cat="diagnostic" data-name="Diagnostics" data-price="599">
+    <div class="svc-img"><img th:src="@{/images/category/dogs/health/diagnostics.jpg}" onerror="this.src='/images/placeholder.png'" alt="Diagnostics"/></div>
+    <div class="svc-label"><span class="svc-price">from ₹599</span></div>
+  </div>
+</div>
+
+<!-- Consult by Concern -->
+<h3 class="clinic-concern-title">Consult by concern</h3>
+<div class="clinic-concerns-grid">
+  <div class="concern-card clinic-service-card" data-cat="general" data-name="Consultation - Itching" data-price="399">
+    <div class="concern-img"><img th:src="@{/images/category/dogs/health/itching.jpg}" onerror="this.src='/images/placeholder.png'" alt="Itching"/></div>
+    <p class="concern-label">Itching</p>
+  </div>
+  <div class="concern-card clinic-service-card" data-cat="general" data-name="Consultation - Hairfall" data-price="399">
+    <div class="concern-img"><img th:src="@{/images/category/dogs/health/hairfall.jpg}" onerror="this.src='/images/placeholder.png'" alt="Hairfall"/></div>
+    <p class="concern-label">Hairfall</p>
+  </div>
+  <div class="concern-card clinic-service-card" data-cat="general" data-name="Consultation - Rashes" data-price="399">
+    <div class="concern-img"><img th:src="@{/images/category/dogs/health/rashes.jpg}" onerror="this.src='/images/placeholder.png'" alt="Rashes"/></div>
+    <p class="concern-label">Rashes</p>
+  </div>
+  <div class="concern-card clinic-service-card" data-cat="general" data-name="Consultation - Loose Stools" data-price="399">
+    <div class="concern-img"><img th:src="@{/images/category/dogs/health/loosestools.jpg}" onerror="this.src='/images/placeholder.png'" alt="Loose Stools"/></div>
+    <p class="concern-label">Loose Stools</p>
+  </div>
+  <div class="concern-card clinic-service-card" data-cat="general" data-name="Consultation - Vomiting" data-price="399">
+    <div class="concern-img"><img th:src="@{/images/category/dogs/health/vomiting.jpg}" onerror="this.src='/images/placeholder.png'" alt="Vomiting"/></div>
+    <p class="concern-label">Vomiting</p>
+  </div>
+</div>
+
+      <!-- Clinic List -->
+      <h3 class="clinic-select-title">Select a clinic for your pet</h3>
+      <div class="clinic-list">
+        <div class="clinic-item" onclick="selectClinic(this)">
+          <img th:src="@{/images/category/dogs/health/bangalore.jpg}" onerror="this.src='/images/placeholder.png'" alt="Koramangala"/>
+          <div class="clinic-info">
+            <p class="clinic-name">Supertails, Koramangala</p>
+            <p class="clinic-address">156, 1st Cross Road, 1st Block Koramangala, Next to Marvel Multispeciality Hospital</p>
+            <div class="clinic-status">
+              <span class="open-badge">Open</span>
+              <span class="clinic-time">Closes 22:00</span>
+              <span class="clinic-slot">Next slot - 6:00 PM</span>
+            </div>
+          </div>
+        </div>
+        <div class="clinic-item" onclick="selectClinic(this)">
+          <img th:src="@{/images/category/dogs/health/banashankari.jpg}" onerror="this.src='/images/placeholder.png'" alt="Banashankari"/>
+          <div class="clinic-info">
+            <p class="clinic-name">Supertails, Banashankari</p>
+            <p class="clinic-address">1587, 36th, Cross, Outer Ring Rd, Banashankari Stage II, Dr. Puneeth Rajkumar Road</p>
+            <div class="clinic-status">
+              <span class="open-badge">Open</span>
+              <span class="clinic-time">Closes 22:00</span>
+              <span class="clinic-slot">Next slot - 6:00 PM</span>
+            </div>
+          </div>
+        </div>
+        <div class="clinic-item" onclick="selectClinic(this)">
+          <img th:src="@{/images/category/dogs/health/brookefield.jpg}" onerror="this.src='/images/placeholder.png'" alt="Brookefield"/>
+          <div class="clinic-info">
+            <p class="clinic-name">Supertails, Brookefield</p>
+            <p class="clinic-address">Ground Floor, Site No. 2, No. 6/4, Kundalahalli Main Rd, Lakshminarayana Pura, Opposite Smart Bazar</p>
+            <div class="clinic-status">
+              <span class="open-badge">Open</span>
+              <span class="clinic-time">Closes 22:00</span>
+              <span class="clinic-slot">Next slot - 6:00 PM</span>
+            </div>
+          </div>
+        </div>
+        <div class="clinic-item" onclick="selectClinic(this)">
+          <img th:src="@{/images/category/dogs/health/bannerghatta.jpg}" onerror="this.src='/images/placeholder.png'" alt="Bannerghatta"/>
+          <div class="clinic-info">
+            <p class="clinic-name">Supertails, Bannerghatta</p>
+            <p class="clinic-address">29/2, Bannerghatta Rd, Vijayashri Layout, Hulimavu, Opposite Arekere Lake</p>
+            <div class="clinic-status">
+              <span class="open-badge">Open</span>
+              <span class="clinic-time">Closes 22:00</span>
+              <span class="clinic-slot">Next slot - 6:00 PM</span>
+            </div>
+          </div>
+        </div>
+        <div class="clinic-item" onclick="selectClinic(this)">
+          <img th:src="@{/images/category/dogs/health/kalyannagar.jpg}" onerror="this.src='/images/placeholder.png'" alt="Kalyan Nagar"/>
+          <div class="clinic-info">
+            <p class="clinic-name">Supertails, Kalyan Nagar</p>
+            <p class="clinic-address">IGN Towers, Dooda Banaswadi Main Road, Ram Gopal Layout, Banaswadi, Next to Punjab National Bank</p>
+            <div class="clinic-status">
+              <span class="open-badge">Open</span>
+              <span class="clinic-time">Closes 22:00</span>
+              <span class="clinic-slot">Next slot - 6:00 PM</span>
+            </div>
+          </div>
+        </div>
+        <div class="clinic-item" onclick="selectClinic(this)">
+          <img th:src="@{/images/category/dogs/health/rajajinagar.jpg}" onerror="this.src='/images/placeholder.png'" alt="Rajajinagar"/>
+          <div class="clinic-info">
+            <p class="clinic-name">Supertails, Rajajinagar</p>
+            <p class="clinic-address">7, 2nd Cross Rd, D-Block, Gayatrinagar, Rajajinagar, Next to Mahakavi Kuvempu Road Metro Station</p>
+            <div class="clinic-status">
+              <span class="open-badge">Open</span>
+              <span class="clinic-time">Closes 19:00</span>
+              <span class="clinic-slot">Next slot - 6:00 PM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Continue Button -->
+      <div class="clinic-continue">
+        <button class="btn-continue" onclick="continueBooking()">Continue</button>
+      </div>
+
+    </div><!-- end clinic-main-content -->
+  </div><!-- end clinic-booking-wrap -->
+</div>
+
+
+
+      <!-- ─── Product Grid for all other sections ─── -->
+      <div th:if="${section != null and section != 'clinic'}">
+
+          <!-- View All link -->
+  <div style="margin-bottom:1rem;">
+    <a th:href="@{/category/dog/health}" class="btn-primary">← View All Health Products</a>
+  </div>
+
+        <div th:if="${products.empty}"
+             style="text-align:center;padding:3rem;color:var(--text-muted);">
+          <p style="font-size:3rem;">🔍</p>
+          <p>No products found. Try a different filter.</p>
+          <a th:href="@{/category/dog/health}" class="btn btn-brand"
+             style="margin-top:1rem;display:inline-block;">
+            Browse All
+          </a>
+        </div>
+
+        <p th:unless="${products.empty}"
+           style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;"
+           th:text="${products.size()} + ' products'">0 products</p>
+
+        <div th:unless="${products.empty}" class="product-grid">
+          <div th:each="product : ${products}" class="product-card">
+            <a th:href="@{/products/{id}(id=${product.id})}">
+              <div class="product-img-wrap img-bg-green">
+                <img th:if="${product.imageUrl != null}"
+                     th:src="${product.imageUrl}"
+                     th:alt="${product.name}"
+                     onerror="this.src='/images/placeholder.png'"/>
+                <span th:if="${product.imageUrl == null}"
+                      class="product-img-placeholder">💊</span>
+              </div>
+              <div class="product-body">
+                <span class="product-tag tag-pharma"
+                      th:text="${product.category?.name}">Tag</span>
+                <p class="product-name" th:text="${product.name}">Name</p>
+                <p class="product-price"
+                   th:text="'₹' + ${product.price}">₹0</p>
+              </div>
+            </a>
+            <div style="padding:0 1rem 1rem;">
+              <form method="post" th:action="@{/cart/add}">
+                <input type="hidden" name="productId" th:value="${product.id}"/>
+            
+                <button type="submit"
+                        class="btn-add btn-add-green"
+                        style="width:100%;">
+                  Add to cart
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Filter + Select JS -->
+</div> <!-- end layout:fragment="content" -->
+
+
+
+
+<th:block layout:fragment="scripts">
+  <script>
+
+document.querySelectorAll('.clinic-service-card').forEach(card => {
+  card.addEventListener('click', function () {
+    document.querySelectorAll('.clinic-service-card').forEach(c => c.classList.remove('selected'));
+    this.classList.add('selected');
+  });
+});
+
+function filterServices(cat, el) {
+  document.querySelectorAll('.clinic-filter-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.clinic-service-card').forEach(card => {
+    card.style.display = (cat === 'all' || card.dataset.cat === cat) ? 'block' : 'none';
+  });
+}
+
+function selectClinic(el) {
+  document.querySelectorAll('.clinic-item').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function continueBooking() {
+  const selectedClinic = document.querySelector('.clinic-item.selected');
+  if (!selectedClinic) {
+    alert('Please select a clinic first.');
+    return;
+  }
+
+  const selectedService = document.querySelector('.clinic-service-card.selected');
+  if (!selectedService) {
+    alert('Please select a service or concern first.');
+    return;
+  }
+
+  const clinicName      = selectedClinic.querySelector('.clinic-name').textContent.trim();
+  const clinicAddress   = selectedClinic.querySelector('.clinic-address').textContent.trim();
+  const serviceName     = selectedService.dataset.name;
+  const serviceCategory = selectedService.dataset.cat;
+  const price           = selectedService.dataset.price;
+
+  const params = new URLSearchParams({
+    serviceName, serviceCategory, price, clinicName, clinicAddress
+  });
+
+  window.location.href = '/booking/confirm?' + params.toString();
+}
+   
+  </script>
+
+  <script th:src="@{/js/doghealth.js}" defer></script>
+</th:block>
+
+
+
+
+</body>
+</html>

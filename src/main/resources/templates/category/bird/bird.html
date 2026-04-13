@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birds - Food</title>
+    <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+    <link rel="stylesheet" th:href="@{/css/buttons.css}"/>
+    <link rel="stylesheet" th:href="@{/css/products.css}"/>
+    <link rel="stylesheet" th:href="@{/css/category.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <section class="quick-nav">
+        <a th:href="@{/products(keyword='bird food')}"        class="qnav-pill">Food</a>
+        <a th:href="@{/products(keyword='bird treats')}"      class="qnav-pill">Treats</a>
+        <a th:href="@{/products(keyword='bird accessories')}" class="qnav-pill"> Accessories</a>
+    </section>
+
+    <div class="coupon-bar">
+        Get <strong>15% OFF</strong> on your first order &nbsp;|&nbsp;
+        Coupon code: <span class="coupon-code">NEW15</span>
+    </div>
+
+    <div class="shop-layout">
+
+        <aside class="shop-sidebar">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+                <span style="font-weight:700;font-size:0.95rem;">FILTERS</span>
+                <a th:href="@{/category/bird/food}"
+                   style="font-size:0.8rem;color:var(--brand);font-weight:600;">Hide ✕</a>
+            </div>
+
+            <!-- Price -->
+            <div class="filter-group">
+                <p class="filter-group-title">Price</p>
+                <input type="range" id="price-range-slider" min="0" max="3000"
+                       th:value="${maxPrice}"
+                       style="width:100%;accent-color:var(--brand);"/>
+                <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-top:4px;">
+                    <span>₹0</span>
+                    <span id="price-max-label"
+                          th:text="'₹' + ${#numbers.formatInteger(maxPrice, 0, 'COMMA')}">₹3,000</span>
+                </div>
+                <input type="hidden" id="currentSection"    th:value="${section}"/>
+                <input type="hidden" id="currentCategoryId" th:value="${selectedCategory}"/>
+            </div>
+
+            <!-- Pet Type -->
+            <div class="filter-group">
+                <p class="filter-group-title">Pet Type</p>
+                <label class="filter-check" th:each="entry : ${petTypeCountMap}">
+                    <input type="checkbox" name="petType"
+                           th:value="${entry.key}"
+                           th:checked="${param.petType != null and param.petType.contains(entry.key)}"/>
+                    <span th:text="${entry.key}">Pet</span>
+                    <span class="filter-count" th:text="'(' + ${entry.value} + ')'"></span>
+                </label>
+            </div>
+
+            <!-- Brand -->
+            <div class="filter-group">
+                <p class="filter-group-title">Brand</p>
+                <label class="filter-check" th:each="entry : ${brandCountMap}">
+                    <input type="checkbox" name="brand"
+                           th:value="${entry.key}"
+                           th:checked="${param.brand != null and param.brand.contains(entry.key)}"/>
+                    <span th:text="${entry.key}">Brand</span>
+                    <span class="filter-count" th:text="'(' + ${entry.value} + ')'"></span>
+                </label>
+            </div>
+        </aside>
+
+        <div class="shop-main">
+
+            <div class="food-type-pills" th:if="${section == 'food'}">
+                <a th:href="@{/category/bird/food(section='food')}"
+                   th:classappend="${selectedCategory == null} ? ' active' : ''"
+                   class="food-pill">
+                    <img th:src="@{/images/category/birds/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All"/>
+                    <span>All</span>
+                </a>
+                <a th:href="@{/category/bird/food(section='food', categoryId=165)}"
+                   th:classappend="${selectedCategory == 165} ? ' active' : ''"
+                   class="food-pill">
+                    <img th:src="@{/images/category/birds/bird-food.jpg}" onerror="this.src='/images/placeholder.png'" alt="Bird Food"/>
+                    <span>Bird Food</span>
+                </a>
+            </div>
+
+            <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;"
+               th:text="${products.size()} + ' products'">0 products</p>
+
+            <div th:if="${products.empty}"
+                 style="text-align:center;padding:3rem;color:var(--text-muted);">
+                <p style="font-size:3rem;">🔍</p>
+                <p>No products found. Try a different filter.</p>
+                <a th:href="@{/products}" class="btn btn-brand"
+                   style="margin-top:1rem;display:inline-block;">Browse All</a>
+            </div>
+
+            <div th:unless="${products.empty}" class="product-grid">
+                <div th:each="product : ${products}" class="product-card">
+                    <a th:href="@{/products/{id}(id=${product.id})}">
+                        <div class="product-img-wrap img-bg-purple">
+                            <img th:if="${product.imageUrl != null}"
+                                 th:src="@{${product.imageUrl}}"
+                                 th:alt="${product.name}"
+                                 onerror="this.src='/images/placeholder.png'"/>
+                            <span th:if="${product.imageUrl == null}" class="product-img-placeholder">🐦</span>
+                        </div>
+                        <div class="product-body">
+                            <span class="product-tag tag-food" th:text="${product.category?.name}">Tag</span>
+                            <p class="product-name" th:text="${product.name}">Name</p>
+                            <p class="product-price" th:text="'₹' + ${product.price}">₹0</p>
+                        </div>
+                    </a>
+                    <div style="padding:0 1rem 1rem;">
+                        <form method="post" th:action="@{/cart/add}">
+                            <input type="hidden" name="productId" th:value="${product.id}"/>
+                            <button type="submit" class="btn-add btn-add-purple" style="width:100%;">
+                                Add to cart
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <th:block layout:fragment="scripts">
+    <script th:src="@{/js/sidebar.js}"></script>
+</th:block>
+</div>
+</body>
+</html>

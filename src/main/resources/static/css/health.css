@@ -1,0 +1,465 @@
+/* ════════════════════════════════════
+   HEALTHCARE PAGE TITLE
+════════════════════════════════════ */
+.health-page-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--dark);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.health-page-title::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 3px;
+  background: var(--green);
+  margin: 0.5rem auto 1.5rem;
+  border-radius: 2px;
+}
+
+/* ════════════════════════════════════
+   HEALTHCARE CARD GRID
+════════════════════════════════════ */
+.health-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.health-card {
+  background: var(--bg-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform var(--transition), box-shadow var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.health-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.health-card-img {
+  position: relative;
+  height: 160px;
+  background: #FFF0F8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.health-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 1rem;
+}
+
+/* Badges */
+.health-badge {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.fear-free {
+  background: #22C55E;
+  color: white;
+}
+
+.discount {
+  background: #AAEE00;
+  color: #1a1a1a;
+}
+
+.selling-fast {
+  background: #AAEE00;
+  color: #1a1a1a;
+}
+
+.health-card-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--dark);
+  padding: 0.75rem 0.85rem 0.1rem;
+  line-height: 1.3;
+}
+
+.health-card-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 0 0.85rem 0.75rem;
+}
+
+/* ════════════════════════════════════
+   CLINIC BOOKING
+════════════════════════════════════ */
+/* ── Clinic Booking Layout ── */
+.clinic-booking-wrap {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.clinic-main-content {
+  min-width: 0;  /* prevents grid blowout */
+}
+
+/* Progress Steps */
+.clinic-steps {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  padding-top: 0.5rem;
+}
+
+.clinic-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding: 6px 0;
+}
+
+.clinic-step.active {
+  color: var(--dark);
+  font-weight: 600;
+}
+
+.step-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: white;
+  flex-shrink: 0;
+}
+
+.active-dot {
+  border-color: var(--brand);
+  background: var(--brand);
+}
+
+.clinic-step-line {
+  width: 2px;
+  height: 24px;
+  background: var(--border);
+  margin-left: 6px;
+}
+
+/* Clinic List */
+.clinic-list-wrap {
+  flex: 1;
+}
+
+.clinic-select-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 1.25rem;
+}
+
+.clinic-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.clinic-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-white);
+  cursor: pointer;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.clinic-item:hover {
+  border-color: var(--brand);
+  box-shadow: var(--shadow-md);
+}
+
+.clinic-item img {
+  width: 80px;
+  height: 70px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.clinic-info { flex: 1; }
+
+.clinic-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 4px;
+}
+
+.clinic-address {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.clinic-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.open-badge {
+  background: var(--green-pale);
+  color: #166534;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.clinic-time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.clinic-slot {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Continue Button */
+.clinic-continue {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.btn-continue {
+  background: #FF8C00;
+  color: white;
+  border: none;
+  padding: 0.85rem 3rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font);
+  width: 100%;
+  transition: opacity var(--transition);
+}
+
+.btn-continue:hover {
+  opacity: 0.9;
+}
+
+
+
+
+/* ── Clinic Hero ── */
+.clinic-hero { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; }
+.clinic-hero-title { font-size: 22px; font-weight: 700; color: #1a1a1a; }
+.clinic-city-badge { display: inline-block; margin-top: 6px; background: #d4f5d4; color: #1a6b1a; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; }
+.btn-book-now { background: #ff6b35; color: white; font-size: 15px; font-weight: 600; border: none; padding: 12px 28px; border-radius: 30px; cursor: pointer; text-decoration: none; }
+.btn-book-now:hover { background: #e55a26; }
+
+/* ── Filter Pills ── */
+.clinic-filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.clinic-filter-pill { padding: 7px 18px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 1px solid #d1c8f5; background: white; color: #534AB7; }
+.clinic-filter-pill.active { background: #534AB7; color: white; border-color: #534AB7; }
+
+/* ── Services Grid ── */
+.clinic-services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; margin-bottom: 2rem; }
+.clinic-service-card { background: white; border: 1px solid #e8e4fb; border-radius: 16px; overflow: hidden; cursor: pointer; }
+.clinic-service-card:hover { border-color: #7F77DD; }
+.svc-img { width: 100%; aspect-ratio: 1; overflow: hidden; }
+.svc-img img { width: 100%; height: 100%; object-fit: cover; }
+.svc-label { background: #534AB7; color: white; padding: 10px 8px; text-align: center; }
+.svc-name { display: block; font-size: 13px; font-weight: 600; }
+.svc-price { display: block; font-size: 11px; color: #ccc9f5; margin-top: 2px; }
+
+/* ── Consult by Concern ── */
+.clinic-concern-title { font-size: 18px; font-weight: 700; margin-bottom: 1rem; color: #1a1a1a; }
+.clinic-concerns-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+.concern-card { background: white; border: 1px solid #d1c8f5; border-radius: 14px; overflow: hidden; cursor: pointer; }
+.concern-card:hover { border-color: #7F77DD; }
+.concern-img { width: 100%; aspect-ratio: 1; overflow: hidden; background: #f0effe; }
+.concern-img img { width: 100%; height: 100%; object-fit: cover; }
+.concern-label { font-size: 13px; text-align: center; padding: 8px 6px; color: #1a1a1a; }
+
+/* ── Clinic List ── */
+.clinic-select-title { font-size: 16px; font-weight: 600; margin-bottom: 1rem; color: #1a1a1a; }
+.clinic-item { display: flex; gap: 14px; background: white; border: 1px solid #e5e5e5; border-radius: 12px; padding: 14px; cursor: pointer; margin-bottom: 10px; }
+.clinic-item:hover { border-color: #aaa; }
+.clinic-item.selected { border: 2px solid #ff6b35; }
+.clinic-item img { width: 80px; height: 70px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+.clinic-name { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.clinic-address { font-size: 12px; color: #666; margin-bottom: 6px; line-height: 1.4; }
+.clinic-status { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 12px; }
+.open-badge { color: #2e7d32; font-weight: 600; }
+.clinic-time { color: #666; }
+.clinic-slot { color: #1565C0; }
+
+/* ── Continue Button ── */
+.clinic-continue { margin-top: 1rem; }
+.btn-continue { width: 100%; padding: 14px; background: #ff6b35; color: white; font-size: 15px; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; }
+.btn-continue:hover { background: #e55a26; }
+
+
+
+
+/* ──============================ Booking Confirm & Success======================================== ── */
+.booking-confirm-wrap,
+.booking-success-wrap {
+  max-width: 520px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.booking-confirm-title,
+.booking-success-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 1.5rem;
+}
+
+.booking-success-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--green-pale);
+  color: var(--green);
+  font-size: 28px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+}
+
+.booking-success-sub {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.booking-summary-card {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+.booking-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  gap: 1rem;
+}
+
+.booking-row:last-child { border-bottom: none; }
+
+.booking-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.booking-value {
+  font-size: 13px;
+  color: var(--dark);
+  font-weight: 500;
+  text-align: right;
+}
+
+.booking-price-row .booking-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.booking-status-badge {
+  background: var(--green-pale);
+  color: #166534;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.btn-confirm-booking {
+  width: 100%;
+  padding: 14px;
+  background: #ff6b35;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.btn-confirm-booking:hover { background: #e55a26; }
+
+.btn-view-bookings {
+  display: inline-block;
+  padding: 12px 28px;
+  background: var(--brand);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--radius-lg);
+  margin-bottom: 1rem;
+}
+
+.booking-back-link {
+  display: block;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+.booking-back-link:hover { color: var(--brand); }
+
+.booking-success-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.clinic-service-card.selected {
+  border: 2px solid #ff6b35;
+}
+
+.booking-status-badge.cancelled {
+  background: var(--coral-pale);
+  color: var(--coral);
+}

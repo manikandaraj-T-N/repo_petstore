@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog - Essentials</title>
+
+     <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/buttons.css}"/>
+  <link rel="stylesheet" th:href="@{/css/products.css}"/>
+    <link rel="stylesheet" th:href="@{/css/category.css}"/>
+</head>
+<body>
+
+   <div layout:fragment="content">
+
+    <!-- ── Hero Banner ──
+  <section class="cat-hero dog-hero">
+    <div class="cat-hero-text">
+      <p class="cat-hero-sub">BIG SALE</p>
+      <h1>Who Said <span>Treats?</span></h1>
+      <p class="cat-hero-desc">
+        Up to <strong>50% OFF</strong> on dog food, treats &amp; more
+      </p>
+      <a th:href="@{/products(keyword=dog)}" class="btn btn-brand">Shop Now →</a>
+    </div>
+    <div class="cat-hero-img">
+      <img th:src="@{/images/dog-hero.png}"
+           alt="Dog Hero"
+           onerror="this.style.display='none'"/>
+    </div>
+  </section> -->
+
+  <!-- ── Quick Nav Pills ── -->
+  <section class="quick-nav">
+    <a th:href="@{/products(keyword='dog food')}"     class="qnav-pill">🍖 Food</a>
+    <a th:href="@{/products(keyword='dog pharmacy')}" class="qnav-pill">💊 Pharmacy</a>
+    <a th:href="@{/products(keyword='dog clinic')}"   class="qnav-pill">🏥 Clinics</a>
+    <a th:href="@{/products(keyword='dog treats')}"   class="qnav-pill">🦴 Treats</a>
+    <a th:href="@{/products(keyword='dog grooming')}" class="qnav-pill">✂️ Grooming</a>
+    <a th:href="@{/products(keyword='dog fashion')}"  class="qnav-pill">👗 Fashion</a>
+    <a th:href="@{/products(keyword='dog toys')}"     class="qnav-pill">🎾 Toys</a>
+  </section>
+
+  <!-- ── Coupon Bar ── -->
+  <div class="coupon-bar">
+    Get <strong>15% OFF</strong> on your first order &nbsp;|&nbsp;
+    Coupon code: <span class="coupon-code">NEW15</span>
+  </div>
+
+
+   <div class="shop-layout">
+<!-- ─── Sidebar ─── -->
+    <aside class="shop-sidebar">
+      <div style="display:flex;align-items:center;
+                  justify-content:space-between;margin-bottom:1rem;">
+        <span style="font-weight:700;font-size:0.95rem;">FILTERS</span>
+        <a th:href="@{/products}"
+           style="font-size:0.8rem;color:var(--brand);font-weight:600;">
+          Hide ✕
+        </a>
+      </div>
+
+      <!-- Price Range -->
+    <div class="filter-group">
+    <p class="filter-group-title">Price</p>
+    <input type="range" id="price-range-slider"
+           min="0" max="25000"
+           th:value="${maxPrice}"
+           style="width:100%;accent-color:var(--brand);"/>
+    <div style="display:flex;justify-content:space-between;
+                font-size:0.75rem;color:var(--text-muted);margin-top:4px;">
+        <span>₹0</span>
+        <span id="price-max-label"
+              th:text="'₹' + ${#numbers.formatInteger(maxPrice, 0, 'COMMA')}">₹25,000</span>
+    </div>
+
+    <!-- hidden inputs to preserve current URL params -->
+    <input type="hidden" id="currentSection" th:value="${section}"/>
+    <input type="hidden" id="currentCategoryId" th:value="${selectedCategory}"/>
+</div>
+
+      <!-- Breed Size -->
+     <div class="filter-group">
+  <p class="filter-group-title">Breed Size</p>
+
+  <label class="filter-check">
+    <input type="checkbox" name="breedSize" value="Medium"
+           th:checked="${param.breedSize != null and param.breedSize.contains('Medium')}"/>
+    <span>Medium</span>
+    <span class="filter-count"
+      th:text="'(' + ${breedCountMap['Medium'] ?: 0} + ')'"></span>
+  </label>
+
+  <label class="filter-check">
+    <input type="checkbox" name="breedSize" value="Maxi"
+           th:checked="${param.breedSize != null and param.breedSize.contains('Maxi')}"/>
+    <span>Maxi</span>
+   <span class="filter-count"
+      th:text="'(' + ${breedCountMap['Maxi'] ?: 0} + ')'"></span>
+  </label>
+
+  <label class="filter-check">
+    <input type="checkbox" name="breedSize" value="Mini"
+           th:checked="${param.breedSize != null and param.breedSize.contains('Mini')}"/>
+    <span>Mini</span>
+    <span class="filter-count"
+          th:text="'(' + ${breedCountMap['Mini'] ?: 0} + ')'"></span>
+  </label>
+      </div>
+
+      <!-- Veg / Non-Veg -->
+      <div class="filter-group">
+  <p class="filter-group-title">Veg/Non-Veg
+    <span class="filter-arrow">▾</span>
+  </p>
+     <label class="filter-check">
+  <input type="checkbox" name="foodType" value="Non-Veg"
+         th:checked="${param.foodType != null and param.foodType.contains('Non-Veg')}"/>
+  <span>Non-Veg</span>
+  <span class="filter-count"
+        th:text="'(' + ${foodCountMap['Non-Veg'] ?: 0} + ')'"></span>
+</label>
+
+<label class="filter-check">
+  <input type="checkbox" name="foodType" value="Veg"
+         th:checked="${param.foodType != null and param.foodType.contains('Veg')}"/>
+  <span>Veg</span>
+  <span class="filter-count"
+        th:text="'(' + ${foodCountMap['Veg'] ?: 0} + ')'"></span>
+</label>
+      </div> 
+
+
+      <!-- Pet Type -->
+      <div class="filter-group">
+  <p class="filter-group-title">Pet Type</p>
+
+  <label class="filter-check">
+    <input type="checkbox" name="petType" value="Dogs"
+           th:checked="${param.petType != null and param.petType.contains('Dogs')}"/>
+    <span>Dogs</span>
+    <span class="filter-count"
+          th:text="'(' + ${petTypeCountMap['Dogs'] ?: 0} + ')'"></span>
+  </label>
+
+  <label class="filter-check">
+    <input type="checkbox" name="petType" value="Cats"
+           th:checked="${param.petType != null and param.petType.contains('Cats')}"/>
+    <span>Cats</span>
+    <span class="filter-count"
+          th:text="'(' + ${petTypeCountMap['Cats'] ?: 0} + ')'"></span>
+  </label>
+</div>
+
+      <!-- Brand -->
+      <div class="filter-group">
+  <p class="filter-group-title">Brand</p>
+
+  <label class="filter-check" th:each="entry : ${brandCountMap}">
+    <input type="checkbox" name="brand"
+           th:value="${entry.key}"
+           th:checked="${param.brand != null and param.brand.contains(entry.key)}"/>
+
+    <span th:text="${entry.key}">Brand</span>
+
+    <span class="filter-count"
+          th:text="'(' + ${entry.value} + ')'"></span>
+  </label>
+
+</div>
+
+    </aside>
+
+
+ <!-- ─── Main Content ─── -->
+    <div class="shop-main">
+
+<!-- Dry Food Sub Pills -->
+<div class="food-type-pills" th:if="${section == 'dry'}">
+  <a th:href="@{/category/cat/essentials(section='dry')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All"/>
+    <span>All</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='dry', categoryId=90)}"
+     th:classappend="${selectedCategory == 90} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/kitten.jpg}" onerror="this.src='/images/placeholder.png'" alt="Kitten Food"/>
+    <span>Kitten Food</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='dry', categoryId=84)}"
+     th:classappend="${selectedCategory == 84} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/dry.jpg}" onerror="this.src='/images/placeholder.png'" alt="Adult Food"/>
+    <span>Adult Food</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='dry', categoryId=122)}"
+     th:classappend="${selectedCategory == 122} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/newlaunch.jpg}" onerror="this.src='/images/placeholder.png'" alt="New Launch"/>
+    <span>New Launch</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='dry', categoryId=87)}"
+     th:classappend="${selectedCategory == 87} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/prescription.jpg}" onerror="this.src='/images/placeholder.png'" alt="Prescription Diet"/>
+    <span>Prescription Diet</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='dry', categoryId=112)}"
+     th:classappend="${selectedCategory == 112} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/royalcanin.jpg}" onerror="this.src='/images/placeholder.png'" alt="Royal Canin"/>
+    <span>Royal Canin</span>
+  </a>
+</div>
+
+
+<div class="food-type-pills" th:if="${section == 'wet'}">
+  <a th:href="@{/category/cat/essentials(section='wet')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All"/>
+    <span>All</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='wet', categoryId=85)}"
+     th:classappend="${selectedCategory == 85} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/wet.jpg}" onerror="this.src='/images/placeholder.png'" alt="Adult Food"/>
+    <span>Adult Food</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='prescription')}"
+     th:classappend="${section == 'prescription'} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/prescription.jpg}" onerror="this.src='/images/placeholder.png'" alt="Prescription Diet"/>
+    <span>Prescription Diet</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='newlaunch')}"
+     th:classappend="${section == 'newlaunch'} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/newlaunch.jpg}" onerror="this.src='/images/placeholder.png'" alt="New Launch"/>
+    <span>New Launch</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='wet', categoryId=112)}"
+     th:classappend="${selectedCategory == 112} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/royalcanin.jpg}" onerror="this.src='/images/placeholder.png'" alt="Royal Canin"/>
+    <span>Royal Canin</span>
+  </a>
+</div>
+
+<div class="food-type-pills" th:if="${section == 'treats'}">
+  <a th:href="@{/category/cat/essentials(section='treats')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All"/>
+    <span>All</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='treats', categoryId=123)}"
+     th:classappend="${selectedCategory == 123} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/creamy.jpg}" onerror="this.src='/images/placeholder.png'" alt="Creamy Treats"/>
+    <span>Creamy Treats</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='treats', categoryId=114)}"
+     th:classappend="${selectedCategory == 114} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/sheba.jpg}" onerror="this.src='/images/placeholder.png'" alt="Sheba"/>
+    <span>Sheba</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='treats', categoryId=124)}"
+     th:classappend="${selectedCategory == 124} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/jerky.jpg}" onerror="this.src='/images/placeholder.png'" alt="Jerky Treats"/>
+    <span>Jerky Treats</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='treats', categoryId=125)}"
+     th:classappend="${selectedCategory == 125} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/crunchy.jpg}" onerror="this.src='/images/placeholder.png'" alt="Crunchy Treats"/>
+    <span>Crunchy Treats</span>
+  </a>
+</div>
+
+
+<div class="food-type-pills" th:if="${section == 'prescription'}">
+  <a th:href="@{/category/cat/essentials(section='prescription')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All"/>
+    <span>All</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='prescription', categoryId=126)}"
+     th:classappend="${selectedCategory == 126} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/skin-coat.jpg}" onerror="this.src='/images/placeholder.png'" alt="Skin & Coat"/>
+    <span>Skin &amp; Coat</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='prescription', categoryId=127)}"
+     th:classappend="${selectedCategory == 127} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/urinary.jpg}" onerror="this.src='/images/placeholder.png'" alt="Urinary Care"/>
+    <span>Urinary Care</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='prescription', categoryId=128)}"
+     th:classappend="${selectedCategory == 128} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/gastrointestinal.jpg}" onerror="this.src='/images/placeholder.png'" alt="Gastrointestinal"/>
+    <span>Gastrointestinal</span>
+  </a>
+</div>
+
+
+<div class="food-type-pills" th:if="${section == 'premium'}">
+  <a th:href="@{/category/cat/essentials(section='premium')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All"/>
+    <span>All</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='premium', categoryId=84)}"
+     th:classappend="${selectedCategory == 84} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/dry.jpg}" onerror="this.src='/images/placeholder.png'" alt="Dry Food"/>
+    <span>Dry Food</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='premium', categoryId=85)}"
+     th:classappend="${selectedCategory == 85} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/wet.jpg}" onerror="this.src='/images/placeholder.png'" alt="Wet Food"/>
+    <span>Wet Food</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='newlaunch')}"
+     th:classappend="${section == 'newlaunch'} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/newlaunch.jpg}" onerror="this.src='/images/placeholder.png'" alt="New Launch"/>
+    <span>New Launch</span>
+  </a>
+</div>
+
+
+<div class="food-type-pills" th:if="${section == 'supplements'}">
+  <a th:href="@{/category/cat/essentials(section='supplements')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All"/>
+    <span>All</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='supplements', categoryId=129)}"
+     th:classappend="${selectedCategory == 129} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/calcium.jpg}" onerror="this.src='/images/placeholder.png'" alt="Calcium Supplement"/>
+    <span>Calcium Supplement</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='supplements', categoryId=130)}"
+     th:classappend="${selectedCategory == 130} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/immunity.jpg}" onerror="this.src='/images/placeholder.png'" alt="Immunity Boosters"/>
+    <span>Immunity Boosters</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='supplements', categoryId=131)}"
+     th:classappend="${selectedCategory == 131} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/skin-coat-supplements.jpg}" onerror="this.src='/images/placeholder.png'" alt="Skin &amp; Coat"/>
+    <span>Skin &amp; Coat Supplement</span>
+  </a>
+  
+  
+</div>
+
+<div class="food-type-pills" th:if="${section == 'kitten'}">
+  <a th:href="@{/category/cat/essentials(section='kitten')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All Food"/>
+    <span>All Food</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='kitten', categoryId=85)}"
+     th:classappend="${selectedCategory == 85} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/wet.jpg}" onerror="this.src='/images/placeholder.png'" alt="Wet Food"/>
+    <span>Wet Food</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='kitten', categoryId=122)}"
+     th:classappend="${selectedCategory == 122} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/newlaunch.jpg}" onerror="this.src='/images/placeholder.png'" alt="New Launch"/>
+    <span>New Launch</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='kitten', categoryId=86)}"
+     th:classappend="${selectedCategory == 86} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/treats.jpg}" onerror="this.src='/images/placeholder.png'" alt="Treats"/>
+    <span>Treats</span>
+  </a>
+</div>
+
+
+<div class="food-type-pills" th:if="${section == 'combos'}">
+  <a th:href="@{/category/cat/essentials(section='combos')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All"/>
+    <span>All</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='combos', categoryId=84)}"
+     th:classappend="${selectedCategory == 84} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/dry.jpg}" onerror="this.src='/images/placeholder.png'" alt="Dry Food"/>
+    <span>Dry Food</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='combos', categoryId=85)}"
+     th:classappend="${selectedCategory == 85} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/wet.jpg}" onerror="this.src='/images/placeholder.png'" alt="Wet Food"/>
+    <span>Wet Food</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='combos', categoryId=86)}"
+     th:classappend="${selectedCategory == 86} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/treats.jpg}" onerror="this.src='/images/placeholder.png'" alt="Treats"/>
+    <span>Treats</span>
+  </a>
+  <a th:href="@{/category/cat/essentials(section='combos', categoryId=113)}"
+     th:classappend="${selectedCategory == 113} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/cats/essentials/whiskas.jpg}" onerror="this.src='/images/placeholder.png'" alt="Whiskas"/>
+    <span>Whiskas</span>
+  </a>
+</div>
+
+
+<!-- Product Count -->
+<p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;"
+   th:text="${products.size()} + ' products'">0 products</p>
+
+<!-- Product Grid -->
+<div th:if="${products.empty}"
+     style="text-align:center;padding:3rem;color:var(--text-muted);">
+  <p style="font-size:3rem;">🔍</p>
+  <p>No products found. Try a different filter.</p>
+  <a th:href="@{/products}" class="btn btn-brand"
+     style="margin-top:1rem;display:inline-block;">
+    Browse All
+  </a>
+</div>
+
+<div th:unless="${products.empty}" class="product-grid">
+  <div th:each="product : ${products}" class="product-card">
+
+    <a th:href="@{/products/{id}(id=${product.id})}">
+      <div class="product-img-wrap img-bg-purple">
+        <img th:if="${product.imageUrl != null}"
+             th:src="@{${product.imageUrl}}"
+             th:alt="${product.name}"
+             onerror="this.src='/images/placeholder.png'"/>
+        <span th:if="${product.imageUrl == null}"
+              class="product-img-placeholder">🐾</span>
+      </div>
+
+      <div class="product-body">
+        <span class="product-tag tag-food"
+              th:text="${product.category?.name}">Tag</span>
+        <p class="product-name" th:text="${product.name}">Name</p>
+        <p class="product-price"
+           th:text="'₹' + ${product.price}">₹0</p>
+      </div>
+    </a>
+
+    <div style="padding:0 1rem 1rem;">
+      <form method="post" th:action="@{/cart/add}">
+        <input type="hidden" name="productId" th:value="${product.id}"/>
+
+       <!-- <input type="hidden" name="redirect" th:value="${#httpServletRequest.requestURI}"/> -->
+        
+        <button type="submit"
+                class="btn-add btn-add-purple"
+                style="width:100%;">
+          Add to cart
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+</div>
+
+<!-- ========================================scripts for filters===================================== -->
+
+<script th:src="@{/js/sidebar.js}" defer></script>
+
+
+</body>
+</html>

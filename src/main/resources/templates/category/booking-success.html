@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}" lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Confirmed - Supertails</title>
+  <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/health.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="booking-success-wrap">
+
+    <div class="booking-success-icon">✓</div>
+    <h2 class="booking-success-title">Booking Confirmed!</h2>
+    <p class="booking-success-sub">Your appointment has been reserved successfully.</p>
+
+    <div class="booking-summary-card">
+      <div class="booking-row">
+        <span class="booking-label">Booking ID</span>
+        <span class="booking-value" th:text="'#' + ${booking.id}">#1</span>
+      </div>
+      <div class="booking-row">
+        <span class="booking-label">Service</span>
+        <span class="booking-value" th:text="${booking.serviceName}">Consultation</span>
+      </div>
+      <div class="booking-row">
+        <span class="booking-label">Clinic</span>
+        <span class="booking-value" th:text="${booking.clinicName}">Koramangala</span>
+      </div>
+      <div class="booking-row">
+        <span class="booking-label">Address</span>
+        <span class="booking-value" th:text="${booking.clinicAddress}">156...</span>
+      </div>
+      <div class="booking-row booking-price-row">
+        <span class="booking-label">Price</span>
+        <span class="booking-price" th:text="'₹' + ${booking.price}">₹399</span>
+      </div>
+      <div class="booking-row">
+        <span class="booking-label">Status</span>
+        <span class="booking-status-badge" th:text="${booking.status}">CONFIRMED</span>
+      </div>
+      <div class="booking-row">
+        <span class="booking-label">Booked at</span>
+        <span class="booking-value"
+              th:text="${#temporals.format(booking.bookedAt, 'dd MMM yyyy, hh:mm a')}">
+          01 Jan 2025
+        </span>
+      </div>
+    </div>
+
+    <div class="booking-success-actions">
+      <a th:href="@{/booking/my-bookings}" class="btn-view-bookings">View my bookings</a>
+      <a th:href="@{/}" class="booking-back-link">Back to home</a>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Cat Litter - Supertails</title>
+  <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/buttons.css}"/>
+  <link rel="stylesheet" th:href="@{/css/products.css}"/>
+  <link rel="stylesheet" th:href="@{/css/category.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+
+
+
+  <!-- Scented Sub Pills -->
+  <div class="food-type-pills" th:if="${section == 'scented'}">
+    <a th:href="@{/category/cat/litter(section='scented')}"
+       th:classappend="${selectedCategory == null} ? ' active' : ''"
+       class="food-pill">
+      <img th:src="@{/images/category/cats/essentials/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All"/>
+      <span>All</span>
+    </a>
+    <a th:href="@{/category/cat/litter(section='scented', categoryId=92)}"
+       th:classappend="${selectedCategory == 92} ? ' active' : ''"
+       class="food-pill">
+      <img th:src="@{/images/category/cats/litter/premium.jpg}" onerror="this.src='/images/placeholder.png'" alt="Premium Litter"/>
+      <span>Premium Litter</span>
+    </a>
+    <a th:href="@{/category/cat/litter(section='scented', categoryId=93)}"
+       th:classappend="${selectedCategory == 93} ? ' active' : ''"
+       class="food-pill">
+      <img th:src="@{/images/category/cats/litter/unscented.jpg}" onerror="this.src='/images/placeholder.png'" alt="Unscented Litter"/>
+      <span>Unscented Litter</span>
+    </a>
+    <a th:href="@{/category/cat/litter(section='scented', categoryId=134)}"
+       th:classappend="${selectedCategory == 134} ? ' active' : ''"
+       class="food-pill">
+      <img th:src="@{/images/category/cats/litter/odor.jpg}" onerror="this.src='/images/placeholder.png'" alt="Odor &amp; Stain Removal"/>
+      <span>Odor &amp; Stain Removal</span>
+    </a>
+  </div>
+
+  <!-- Unscented Sub Pills -->
+  <div class="food-type-pills" th:if="${section == 'unscented'}">
+    <a th:href="@{/category/cat/litter(section='unscented')}"
+       th:classappend="${selectedCategory == null} ? ' active' : ''"
+       class="food-pill">
+      <img th:src="@{/images/category/cats/essentials/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All"/>
+      <span>All</span>
+    </a>
+    <a th:href="@{/category/cat/litter(section='unscented', categoryId=93)}"
+       th:classappend="${selectedCategory == 93} ? ' active' : ''"
+       class="food-pill">
+      <img th:src="@{/images/category/cats/litter/unscented.jpg}" onerror="this.src='/images/placeholder.png'" alt="Unscented Litter"/>
+      <span>Unscented Litter</span>
+    </a>
+    <a th:href="@{/category/cat/litter(section='unscented', categoryId=134)}"
+       th:classappend="${selectedCategory == 134} ? ' active' : ''"
+       class="food-pill">
+      <img th:src="@{/images/category/cats/litter/odor.jpg}" onerror="this.src='/images/placeholder.png'" alt="Odor &amp; Stain Removal"/>
+      <span>Odor &amp; Stain Removal</span>
+    </a>
+  </div>
+
+  <!-- Boxes Sub Pills -->
+  <div class="food-type-pills" th:if="${section == 'boxes'}">
+    <a th:href="@{/category/cat/litter(section='boxes')}"
+       th:classappend="${selectedCategory == null} ? ' active' : ''"
+       class="food-pill">
+      <img th:src="@{/images/category/cats/essentials/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All"/>
+      <span>All</span>
+    </a>
+    <a th:href="@{/category/cat/litter(section='boxes', categoryId=94)}"
+       th:classappend="${selectedCategory == 94} ? ' active' : ''"
+       class="food-pill">
+      <img th:src="@{/images/category/cats/litter/boxes.jpg}" onerror="this.src='/images/placeholder.png'" alt="Litter Boxes"/>
+      <span>Litter Boxes</span>
+    </a>
+  </div>
+
+  <!-- Mats Sub Pills -->
+  <div class="food-type-pills" th:if="${section == 'mats'}">
+    <a th:href="@{/category/cat/litter(section='mats')}"
+       th:classappend="${selectedCategory == null} ? ' active' : ''"
+       class="food-pill">
+      <img th:src="@{/images/category/cats/essentials/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All"/>
+      <span>All</span>
+    </a>
+    <a th:href="@{/category/cat/litter(section='mats', categoryId=95)}"
+       th:classappend="${selectedCategory == 95} ? ' active' : ''"
+       class="food-pill">
+      <img th:src="@{/images/category/cats/litter/mats.jpg}" onerror="this.src='/images/placeholder.png'" alt="Mats &amp; Accessories"/>
+      <span>Mats &amp; Accessories</span>
+    </a>
+  </div>
+
+  <!-- Product Count -->
+  <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;"
+     th:text="${products.size()} + ' products'">0 products</p>
+
+  <!-- Empty State -->
+  <div th:if="${products.empty}"
+       style="text-align:center;padding:3rem;color:var(--text-muted);">
+    <p style="font-size:3rem;">🔍</p>
+    <p>No products found. Try a different filter.</p>
+    <a th:href="@{/category/cat/litter(section='scented')}" class="btn btn-brand"
+       style="margin-top:1rem;display:inline-block;">Browse All</a>
+  </div>
+
+  <!-- Product Grid -->
+  <div th:unless="${products.empty}" class="product-grid">
+    <div th:each="product : ${products}" class="product-card">
+
+      <a th:href="@{/products/{id}(id=${product.id})}">
+        <div class="product-img-wrap img-bg-purple">
+          <img th:if="${product.imageUrl != null}"
+               th:src="@{${product.imageUrl}}"
+               th:alt="${product.name}"
+               onerror="this.src='/images/placeholder.png'"/>
+          <span th:if="${product.imageUrl == null}"
+                class="product-img-placeholder">🐾</span>
+        </div>
+        <div class="product-body">
+          <span class="product-tag tag-food"
+                th:text="${product.category?.name}">Tag</span>
+          <p class="product-name" th:text="${product.name}">Name</p>
+          <p class="product-price"
+             th:text="'₹' + ${product.price}">₹0</p>
+        </div>
+      </a>
+
+      <div style="padding:0 1rem 1rem;">
+        <form method="post" th:action="@{/cart/add}">
+          <input type="hidden" name="productId" th:value="${product.id}"/>
+          <button type="submit" class="btn-add btn-add-purple" style="width:100%;">
+            Add to cart
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

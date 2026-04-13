@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset=UTF-8>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Form - Supertails</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="admin-layout">
+    <aside class="sidebar">
+        <h2>🐾 Supertails</h2>
+        <nav>
+            <a th:href="@{/admin}">Dashboard</a>
+            <a th:href="@{/admin/products}">Products</a>
+            <a th:href="@{/admin/orders}">Orders</a>
+            <a th:href="@{/admin/users}">Users</a>
+            <a th:href="@{/logout}">Logout</a>
+        </nav>
+    </aside>
+
+    <main class="admin-main">
+        <h1 th:text="${product.id != null} ? 'Edit Product' : 'Add Product'">Product Form</h1>
+
+        <form method="post"
+              th:action="${product.id != null}
+                ? @{/admin/products/edit/{id}(id=${product.id})}
+                : @{/admin/products/save}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <label>Name</label>
+            <input type="text" name="name" th:value="${product.name}" required placeholder="Enter Name"/>
+
+            <label for="description">Description</label>
+            <textarea name="description" th:text="${product.description}" placeholder="Description"></textarea>
+
+            <label for="price">Price (₹)</label>
+            <input type="number" name="price" step="0.01" th:value="${product.price}" placeholder="Enter Price" required/>
+
+            <label for="name">Stock</label>
+            <input type="number" name="stock" placeholder="Enter the Stock " th:value="${product.stock}"/>
+
+            <label>Image URL</label>
+            <input type="text" name="imageUrl" th:value="${product.imageUrl}" placeholder="Upload product image"/>
+
+            <label>Category</label>
+            <select name="category.id" title="category">
+                <option value="">-- Select Category --</option>
+                <option th:each="cat : ${categories}"
+                        th:value="${cat.id}"
+                        th:text="${cat.name}"
+                        th:selected="${product.category?.id == cat.id}">
+                </option>
+            </select>
+
+            <label>Type</label>
+            <select name="type" title="product-type">
+                <option th:each="t : ${T(com.supertails.entity.Product.ProductType).values()}"
+                        th:value="${t}"
+                        th:text="${t}"
+                        th:selected="${product.type == t}">
+                </option>
+            </select>
+
+            <label>
+                <input type="checkbox" name="available" th:checked="${product.available}"/> Available
+            </label>
+
+            <button type="submit">Save Product</button>
+            <a th:href="@{/admin/products}">Cancel</a>
+        </form>
+    </main>
+</div>
+</body>
+</html>

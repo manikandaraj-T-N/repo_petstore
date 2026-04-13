@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset=UTF-8>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Supertails</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="admin-layout">
+    <aside class="sidebar">
+        <h2>Supertails</h2>
+        <nav>
+            <a th:href="@{/admin}">Dashboard</a>
+            <a th:href="@{/admin/products}">Products</a>
+            <a th:href="@{/admin/orders}">Orders</a>
+            <a th:href="@{/admin/users}">Users</a>
+            <a th:href="@{/logout}">Logout</a>
+        </nav>
+    </aside>
+
+    <main class="admin-main">
+        <h1>Dashboard</h1>
+
+        <!-- Stat Cards -->
+        <div class="stat-grid">
+            <div class="stat-card">
+                <h3>Total Products</h3>
+                <p th:text="${totalProducts}">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Orders</h3>
+                <p th:text="${totalOrders}">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <p th:text="${totalUsers}">0</p>
+            </div>
+            <div class="stat-card pending">
+                <h3>Pending Orders</h3>
+                <p th:text="${pendingOrders}">0</p>
+            </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <h2>Recent Orders</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Order #</th>
+                    <th>Customer</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="order : ${recentOrders}">
+                    <td th:text="'#' + ${order.id}">ID</td>
+                    <td th:text="${order.user.name}">Customer</td>
+                    <td th:text="'₹' + ${order.totalAmount}">Total</td>
+                    <td>
+                        <span th:text="${order.status}"
+                              th:classappend="${order.status.name() == 'DELIVERED'} ? 'badge-green' :
+                                             (${order.status.name() == 'CANCELLED'} ? 'badge-red' : 'badge-blue')">
+                        </span>
+                    </td>
+                    <td th:text="${#temporals.format(order.placedAt, 'dd MMM yyyy')}">Date</td>
+                    <td><a th:href="@{/admin/orders}">Manage</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</div>
+
+</body>
+</html>

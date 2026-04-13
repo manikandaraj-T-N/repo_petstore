@@ -1,0 +1,119 @@
+ ==============================dogparent code------------------------
+  <!-- ─── Default view: section cards grid ─── -->
+      <div th:if="${section == null}">
+        <h2 class="health-page-title">Pet Parent</h2>
+        <div class="health-card-grid">
+
+          <a th:href="@{/category/dog/petparent(section='tshirts')}" class="health-card">
+            <div class="health-card-img">
+              <img th:src="@{/images/category/dogs/p-1.jpg}" onerror="this.src='/images/placeholder.png'" alt="Tshirts"/>
+              <span class="health-badge discount">Up to 60% off</span>
+            </div>
+            <p class="health-card-title">Tshirts</p>
+            <p class="health-card-sub">Pet Parent</p>
+          </a>
+
+          <a th:href="@{/category/dog/petparent(section='keychains')}" class="health-card">
+            <div class="health-card-img">
+              <img th:src="@{/images/category/dogs/p-2.jpg}" onerror="this.src='/images/placeholder.png'" alt="Key Chains"/>
+              <span class="health-badge discount">Up to 15% off</span>
+            </div>
+            <p class="health-card-title">Key Chains</p>
+            <p class="health-card-sub">Pet Parent</p>
+          </a>
+
+          <a th:href="@{/category/dog/petparent(section='charms')}" class="health-card">
+            <div class="health-card-img">
+              <img th:src="@{/images/category/dogs/p-3.jpg}" onerror="this.src='/images/placeholder.png'" alt="Charms"/>
+              <span class="health-badge discount">Up to 38% off</span>
+            </div>
+            <p class="health-card-title">Charms</p>
+            <p class="health-card-sub">Pet Parent</p>
+          </a>
+
+          <a th:href="@{/category/dog/petparent(section='coasters')}" class="health-card">
+            <div class="health-card-img">
+              <img th:src="@{/images/category/dogs/p-4.jpg}" onerror="this.src='/images/placeholder.png'" alt="Coasters"/>
+              <span class="health-badge discount">Up to 25% off</span>
+            </div>
+            <p class="health-card-title">Coasters</p>
+            <p class="health-card-sub">Pet Parent</p>
+          </a>
+
+          <a th:href="@{/category/dog/petparent(section='accessories')}" class="health-card">
+            <div class="health-card-img">
+              <img th:src="@{/images/category/dogs/p-5.jpg}" onerror="this.src='/images/placeholder.png'" alt="Accessories"/>
+              <span class="health-badge discount">Up to 50% off</span>
+            </div>
+            <p class="health-card-title">Accessories</p>
+            <p class="health-card-sub">Pet Parent</p>
+          </a>
+
+          <a th:href="@{/category/dog/petparent(section='mugs')}" class="health-card">
+            <div class="health-card-img">
+              <img th:src="@{/images/category/dogs/p-6.jpg}" onerror="this.src='/images/placeholder.png'" alt="Mugs"/>
+              <span class="health-badge discount">Up to 20% off</span>
+            </div>
+            <p class="health-card-title">Mugs</p>
+            <p class="health-card-sub">Pet Parent</p>
+          </a>
+
+          <a th:href="@{/category/dog/petparent(section='plants')}" class="health-card">
+            <div class="health-card-img">
+              <img th:src="@{/images/category/dogs/p-7.jpg}" onerror="this.src='/images/placeholder.png'" alt="Pet-safe plants"/>
+              <span class="health-badge discount">Up to 60% off</span>
+            </div>
+            <p class="health-card-title">Pet-safe plants</p>
+            <p class="health-card-sub">Pet Parent</p>
+          </a>
+
+          <a th:href="@{/category/dog/petparent(section='carry')}" class="health-card">
+            <div class="health-card-img">
+              <img th:src="@{/images/category/dogs/p-8.jpg}" onerror="this.src='/images/placeholder.png'" alt="Everyday carry"/>
+              <span class="health-badge discount">Up to 60% off</span>
+            </div>
+            <p class="health-card-title">Everyday carry</p>
+            <p class="health-card-sub">Pet Parent</p>
+          </a>
+
+        </div>
+      </div>
+
+      ==============================dogparent code------------------------
+
+
+
+
+
+
+      // ─── Filter Arrow Toggle (collapse filter groups) ───
+document.querySelectorAll('.filter-group-title').forEach(title => {
+    title.style.cursor = 'pointer';
+    title.addEventListener('click', () => {
+        const group = title.closest('.filter-group');
+        const items = group.querySelectorAll('.filter-check');
+        const arrow = title.querySelector('.filter-arrow');
+        const isHidden = items[0]?.style.display === 'none';
+
+        items.forEach(item => {
+            item.style.display = isHidden ? '' : 'none';
+        });
+
+        if (arrow) {
+            arrow.textContent = isHidden ? '▾' : '▸';
+        }
+    });
+});
+
+
+
+
+
+
+
+ <!-- th:attr="
+          data-price=${product.price},
+          data-brand=${product.brand?.name?.toLowerCase()},
+          data-pet=${product.petType?.toLowerCase()},
+          data-breed=${product.breedSize?.toLowerCase()},
+          data-veg=${product.vegType?.toLowerCase()}" -->

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Cart - Supertails</title>
+
+  <!-- CSS links -->
+  <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/buttons.css}"/>
+  <link rel="stylesheet" th:href="@{/css/cart.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+
+  <div class="cart-wrap">
+
+    <!-- ─── Left: Cart Items ─── -->
+    <div>
+      <h1 class="cart-title">🛒 Your Cart</h1>
+
+      <!-- Empty State -->
+      <div th:if="${cart.items.empty}" class="empty-cart">
+        <div class="empty-icon">🛒</div>
+        <h2>Your cart is empty</h2>
+        <p style="margin-bottom:1.5rem;">Looks like you haven't added anything yet.</p>
+        <a th:href="@{/products}" class="btn btn-brand">Continue Shopping →</a>
+      </div>
+
+      <!-- Cart Items -->
+      <div th:unless="${cart.items.empty}">
+        <div th:each="item : ${cart.items}" class="cart-item">
+
+          <!-- Image -->
+          <div class="cart-item-img">🐾</div>
+
+          <!-- Info -->
+          <div class="cart-item-info">
+            <p class="cart-item-name"  th:text="${item.product.name}">Product</p>
+            <p class="cart-item-cat"   th:text="${item.product.category?.name}">Category</p>
+            <p class="cart-item-price" th:text="'₹' + ${item.product.price}">₹0</p>
+          </div>
+
+          <!-- Quantity -->
+          <form method="post" th:action="@{/cart/update}"
+                style="display:flex;align-items:center;gap:8px;">
+            <input type="hidden" name="itemId"
+                   th:value="${item.id}"/>
+            <!-- <input type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}"/> -->
+            <div class="qty-control">
+              <button type="submit" name="quantity"
+                      th:value="${item.quantity - 1}">−</button>
+              <span th:text="${item.quantity}">1</span>
+              <button type="submit" name="quantity"
+                      th:value="${item.quantity + 1}">+</button>
+            </div>
+          </form>
+
+          <!-- Subtotal -->
+          <p style="font-weight:800;font-size:1rem;color:var(--brand);min-width:80px;text-align:right;"
+             th:text="'₹' + ${#numbers.formatDecimal(item.subtotal,1,2)}">₹0</p>
+
+          <!-- Remove -->
+          <form method="post" th:action="@{/cart/remove}">
+            <input type="hidden" name="itemId" th:value="${item.id}"/>
+            <!-- <input type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}"/> -->
+            <button type="submit" class="btn-remove">✕ Remove</button>
+          </form>
+
+        </div>
+
+        <a th:href="@{/products}"
+           style="display:inline-flex;align-items:center;gap:6px;
+                  color:var(--brand);font-weight:600;font-size:0.88rem;margin-top:0.5rem;">
+          ← Continue Shopping
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── Right: Order Summary ─── -->
+    <div th:unless="${cart.items.empty}">
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+
+        <div th:each="item : ${cart.items}" class="summary-row">
+          <span th:text="${item.product.name}">Item</span>
+          <span th:text="'₹' + ${#numbers.formatDecimal(item.subtotal,1,2)}">₹0</span>
+        </div>
+
+        <div class="summary-row">
+          <span>Delivery</span>
+          <span style="color:var(--green);font-weight:700;">FREE</span>
+        </div>
+
+        <div class="summary-savings">🎉 You save ₹50 on this order!</div>
+
+        <div class="summary-row total">
+          <span>Total</span>
+          <span th:text="'₹' + ${#numbers.formatDecimal(cart.totalPrice,1,2)}">₹0</span>
+        </div>
+
+        <a th:href="@{/cart/checkout}" class="btn btn-brand"
+           style="width:100%;justify-content:center;margin-top:1.25rem;display:flex;">
+          Proceed to Checkout →
+        </a>
+
+        <!-- Trust badges -->
+        <div style="display:flex;justify-content:center;gap:1.5rem;
+                    margin-top:1.25rem;padding-top:1rem;
+                    border-top:1px solid var(--border);">
+          <div style="text-align:center;font-size:0.72rem;color:var(--text-muted);">
+            <div style="font-size:1.2rem;">🔒</div>Secure
+          </div>
+          <div style="text-align:center;font-size:0.72rem;color:var(--text-muted);">
+            <div style="font-size:1.2rem;">✅</div>Authentic
+          </div>
+          <div style="text-align:center;font-size:0.72rem;color:var(--text-muted);">
+            <div style="font-size:1.2rem;">🚚</div>Free Ship
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

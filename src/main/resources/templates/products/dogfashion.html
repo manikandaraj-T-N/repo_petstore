@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fashion & Lifestyle - Supertails</title>
+  <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/buttons.css}"/>
+  <link rel="stylesheet" th:href="@{/css/products.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+
+  <div class="shop-layout">
+
+    <!-- ─── Sidebar ─── -->
+  <aside class="shop-sidebar">
+
+<form method="get" th:action="@{/category/dog/fashion}">
+
+  <!-- Preserve params -->
+  <input type="hidden" name="section" th:value="${section}" />
+  <input type="hidden" name="categoryId" th:value="${selectedCategory}" />
+
+  <!-- PRICE -->
+  <div class="filter-group">
+    <p class="filter-group-title">Price</p>
+
+    <input type="range"
+           name="maxPrice"
+           min="0" max="25000"
+           th:value="${maxPrice}"
+           style="width:100%;accent-color:var(--brand);" />
+
+    <div style="display:flex;justify-content:space-between;
+                font-size:0.75rem;color:var(--text-muted);margin-top:4px;">
+      <span>₹0</span>
+      <span th:text="'₹' + ${#numbers.formatInteger(maxPrice, 0, 'COMMA')}"></span>
+    </div>
+  </div>
+
+  <!-- BRAND -->
+  <div class="filter-group">
+    <p class="filter-group-title">Brand</p>
+
+    <label class="filter-check" th:each="entry : ${brandCountMap}">
+      <input type="checkbox" name="brand"
+             th:value="${entry.key}"
+             th:checked="${param.brand != null and param.brand.contains(entry.key)}"/>
+
+      <span th:text="${entry.key}">Brand</span>
+
+      <span class="filter-count"
+            th:text="'(' + ${entry.value} + ')'"></span>
+    </label>
+  </div>
+
+  <!-- APPLY BUTTON -->
+  <button type="submit" style="margin-top:10px;">Apply Filters</button>
+
+</form>
+
+</aside>
+
+    <!-- ─── Main Content ─── -->
+    <div class="shop-main">
+
+      <!-- Boots Sub Pills -->
+<div class="food-type-pills" th:if="${section == 'boots'}">
+  <a th:href="@{/category/dog/fashion(section='boots')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/all.jpg}" 
+          onerror="this.src='/images/placeholder.png'" alt="All Boots and Socks"/>
+     <span>All</span></a>
+
+  <a th:href="@{/category/dog/fashion(section='boots', categoryId=38)}"
+     th:classappend="${selectedCategory == 38} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/boots/tshirts-shirts/15buttons-paws-tive-love-shirt.jpg}" 
+          onerror="this.src='/images/placeholder.png'" alt="Tshirts and Shirts"/>
+     <span>Tshirts &amp; Shirts</span></a>
+
+  <a th:href="@{/category/dog/fashion(section='boots', categoryId=39)}"
+     th:classappend="${selectedCategory == 39} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/boots/printed-clothing/15furries-kitty-dreams-shirt.jpg}" 
+          onerror="this.src='/images/placeholder.png'" alt="Printed Clothing"/>
+     <span>Printed Clothing</span></a>
+
+  <a th:href="@{/category/dog/fashion(section='boots', categoryId=40)}"
+     th:classappend="${selectedCategory == 40} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/boots/cooling-vests/pawgypets-christmas-bandana.jpg}" 
+          onerror="this.src='/images/placeholder.png'" alt="Cooling Vests and Bandana"/>
+     <span>Cooling Vests &amp; Bandana</span></a>
+
+  <a th:href="@{/category/dog/fashion(section='boots', categoryId=41)}"
+     th:classappend="${selectedCategory == 41} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/boots/cotton/pet-set-go-pooh-cotton-shirt.jpg}" 
+          onerror="this.src='/images/placeholder.png'" alt="100 Percent Cotton"/>
+     <span>100% Cotton</span></a>
+</div>
+
+
+<!-- Clothes Sub Pills -->
+<div class="food-type-pills" th:if="${section == 'clothes'}">
+  <a th:href="@{/category/dog/fashion(section='clothes')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/clothes/all.jpg}" 
+          onerror="this.src='/images/placeholder.png'" alt="All Clothes"/>
+     <span>All</span></a>
+
+  <a th:href="@{/category/dog/fashion(section='clothes', categoryId=42)}"
+     th:classappend="${selectedCategory == 42} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/clothes/tshirts/hoomans-anti-social-dog-moms-tshirt.jpg}" 
+          onerror="this.src='/images/placeholder.png'" alt="Tshirts"/>
+     <span>Tshirts</span></a>
+
+  <a th:href="@{/category/dog/fashion(section='clothes', categoryId=43)}"
+     th:classappend="${selectedCategory == 43} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/clothes/socks/socksxpress-looney-tunes-socks.jpg}" 
+          onerror="this.src='/images/placeholder.png'" alt="Socks"/>
+     <span>Socks</span></a>
+
+  <a th:href="@{/category/dog/fashion(section='clothes', categoryId=44)}"
+     th:classappend="${selectedCategory == 44} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/clothes/jewellery/jenni-janki-miyuki-sun-bee-earrings.jpg}" 
+          onerror="this.src='/images/placeholder.png'" alt="Jewellery"/>
+     <span>Jewellery</span></a>
+
+  <a th:href="@{/category/dog/fashion(section='clothes', categoryId=45)}"
+     th:classappend="${selectedCategory == 45} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/clothes/lint-roller/basil-lint-roller-green.jpg}" 
+          onerror="this.src='/images/placeholder.png'" alt="Lint Roller"/>
+     <span>Lint Roller</span></a>
+</div>
+
+<!-- Chew Toys Sub Pills -->
+<div class="food-type-pills" th:if="${section == 'chewtoys'}">
+  <a th:href="@{/category/dog/fashion(section='chewtoys')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/chewtoys/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All"/>
+     <span>All</span></a>
+  <a th:href="@{/category/dog/fashion(section='chewtoys', categoryId=46)}"
+     th:classappend="${selectedCategory == 46} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/chewtoys/chew-toys.jpg}" onerror="this.src='/images/placeholder.png'" alt="Chew Toys"/>
+     <span>Chew Toys</span></a>
+  <a th:href="@{/category/dog/fashion(section='chewtoys', categoryId=47)}"
+     th:classappend="${selectedCategory == 47} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/chewtoys/interactive.jpg}" onerror="this.src='/images/placeholder.png'" alt="Interactive Toys"/>
+     <span>Interactive Toys</span></a>
+  <a th:href="@{/category/dog/fashion(section='chewtoys', categoryId=48)}"
+     th:classappend="${selectedCategory == 48} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/chewtoys/ball-fetch.jpg}" onerror="this.src='/images/placeholder.png'" alt="Ball & Fetch"/>
+     <span>Ball &amp; Fetch Toys</span></a>
+  <a th:href="@{/category/dog/fashion(section='chewtoys', categoryId=49)}"
+     th:classappend="${selectedCategory == 49} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/chewtoys/electronic.jpg}" onerror="this.src='/images/placeholder.png'" alt="Electronic Toys"/>
+     <span>Electronic Toys</span></a>
+  <a th:href="@{/category/dog/fashion(section='chewtoys', categoryId=50)}"
+     th:classappend="${selectedCategory == 50} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/chewtoys/soft-toys.jpg}" onerror="this.src='/images/placeholder.png'" alt="Soft Toys"/>
+     <span>Soft Toys</span></a>
+</div>
+
+<!-- Shampoo Sub Pills -->
+<div class="food-type-pills" th:if="${section == 'shampoo'}">
+  <a th:href="@{/category/dog/fashion(section='shampoo')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/shampoo/all.jpg}" 
+          onerror="this.src='/images/placeholder.png'" alt="All Shampoo"/>
+     <span>All</span></a>
+
+  <a th:href="@{/category/dog/fashion(section='shampoo', categoryId=51)}"
+     th:classappend="${selectedCategory == 51} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/shampoo/shampoo-conditioner/himalaya-erina-shampoo-conditioner.jpg}" 
+          onerror="this.src='/images/placeholder.png'" alt="Shampoo and Conditioner"/>
+     <span>Shampoo &amp; Conditioner</span></a>
+
+  <a th:href="@{/category/dog/fashion(section='shampoo', categoryId=52)}"
+     th:classappend="${selectedCategory == 52} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/shampoo/anti-tick-flea/virbac-clinar-m-anti-tick-flea.jpg}" 
+          onerror="this.src='/images/placeholder.png'" alt="Anti Tick and Flea Shampoo"/>
+     <span>Anti Tick &amp; Flea</span></a>
+
+  <a th:href="@{/category/dog/fashion(section='shampoo', categoryId=53)}"
+     th:classappend="${selectedCategory == 53} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/shampoo/dry-shampoo/natural-remedies-fresh-me-up-dry-shampoo.jpg}" 
+          onerror="this.src='/images/placeholder.png'" alt="Dry Shampoo"/>
+     <span>Dry Shampoo</span></a>
+
+  <a th:href="@{/category/dog/fashion(section='shampoo', categoryId=54)}"
+     th:classappend="${selectedCategory == 54} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/shampoo/wipes-towels/skatrs-antibacterial-cleaning-wipes.jpg}" 
+          onerror="this.src='/images/placeholder.png'" alt="Wipes and Towels"/>
+     <span>Wipes &amp; Towels</span></a>
+</div>
+
+<!-- Harness Sub Pills -->
+<div class="food-type-pills" th:if="${section == 'harness'}">
+  <a th:href="@{/category/dog/fashion(section='harness')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/harness/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All"/>
+     <span>All</span></a>
+  <a th:href="@{/category/dog/fashion(section='harness', categoryId=55)}"
+     th:classappend="${selectedCategory == 55} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/harness/dog-collars.jpg}" onerror="this.src='/images/placeholder.png'" alt="Dog Collars"/>
+     <span>Dog Collars</span></a>
+  <a th:href="@{/category/dog/fashion(section='harness', categoryId=56)}"
+     th:classappend="${selectedCategory == 56} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/harness/cat-collars.jpg}" onerror="this.src='/images/placeholder.png'" alt="Cat Collars"/>
+     <span>Cat Collars</span></a>
+  <a th:href="@{/category/dog/fashion(section='harness', categoryId=57)}"
+     th:classappend="${selectedCategory == 57} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/harness/puppy-accessories.jpg}" onerror="this.src='/images/placeholder.png'" alt="Puppy Accessories"/>
+     <span>Puppy Accessories</span></a>
+  <a th:href="@{/category/dog/fashion(section='harness', categoryId=58)}"
+     th:classappend="${selectedCategory == 58} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/harness/leashes.jpg}" onerror="this.src='/images/placeholder.png'" alt="Leashes"/>
+     <span>Leashes</span></a>
+  <a th:href="@{/category/dog/fashion(section='harness', categoryId=59)}"
+     th:classappend="${selectedCategory == 59} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/harness/harnesses.jpg}" onerror="this.src='/images/placeholder.png'" alt="Harnesses"/>
+     <span>Harnesses</span></a>
+</div>
+
+<!-- Ethnic Sub Pills -->
+<div class="food-type-pills" th:if="${section == 'ethnic'}">
+  <a th:href="@{/category/dog/fashion(section='ethnic')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/ethnic/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All"/>
+     <span>All</span></a>
+
+  <a th:href="@{/category/dog/fashion(section='ethnic', categoryId=61)}"
+     th:classappend="${selectedCategory == 61} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/ethnic/kurta.jpg}" onerror="this.src='/images/placeholder.png'" alt="Kurta"/>
+     <span>Kurta</span></a>
+
+  <a th:href="@{/category/dog/fashion(section='ethnic', categoryId=62)}"
+     th:classappend="${selectedCategory == 62} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/ethnic/sherwani.jpg}" onerror="this.src='/images/placeholder.png'" alt="Sherwani"/>
+     <span>Sherwani</span></a>
+
+  <a th:href="@{/category/dog/fashion(section='ethnic', categoryId=63)}"
+     th:classappend="${selectedCategory == 63} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/ethnic/dresses.jpg}" onerror="this.src='/images/placeholder.png'" alt="Dresses"/>
+     <span>Dresses</span></a>
+
+  <a th:href="@{/category/dog/fashion(section='ethnic', categoryId=64)}"
+     th:classappend="${selectedCategory == 64} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/ethnic/tuxedo.jpg}" onerror="this.src='/images/placeholder.png'" alt="Tuxedo"/>
+     <span>Tuxedo</span></a>
+     
+</div>
+
+<!-- Beds Sub Pills -->
+<div class="food-type-pills" th:if="${section == 'beds'}">
+  <a th:href="@{/category/dog/fashion(section='beds')}"
+     th:classappend="${selectedCategory == null} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/beds/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="All"/>
+     <span>All</span></a>
+  <a th:href="@{/category/dog/fashion(section='beds', categoryId=65)}"
+     th:classappend="${selectedCategory == 65} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/beds/all.jpg}" onerror="this.src='/images/placeholder.png'" alt="Beds"/>
+     <span>Beds</span></a>
+  <a th:href="@{/category/dog/fashion(section='beds', categoryId=66)}"
+     th:classappend="${selectedCategory == 66} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/beds/cushions-blankets.jpg}" onerror="this.src='/images/placeholder.png'" alt="Cushions"/>
+     <span>Cushions &amp; Blankets</span></a>
+  <a th:href="@{/category/dog/fashion(section='beds', categoryId=67)}"
+     th:classappend="${selectedCategory == 67} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/beds/mats.jpg}" onerror="this.src='/images/placeholder.png'" alt="Mats"/>
+     <span>Mats</span></a>
+  <a th:href="@{/category/dog/fashion(section='beds', categoryId=68)}"
+     th:classappend="${selectedCategory == 68} ? ' active' : ''"
+     class="food-pill">
+     <img th:src="@{/images/category/dogs/fashion/beds/elevated-beds.jpg}" onerror="this.src='/images/placeholder.png'" alt="Elevated Beds"/>
+     <span>Elevated Beds</span></a>
+</div>
+
+      <!-- No sub pills for diapers -->
+
+      <!-- Product Count -->
+      <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;"
+         th:text="${products.size()} + ' products'">0 products</p>
+
+      <!-- Product Grid -->
+      <div th:if="${products.empty}"
+           style="text-align:center;padding:3rem;color:var(--text-muted);">
+        <p style="font-size:3rem;">🔍</p>
+        <p>No products found. Try a different filter.</p>
+        <a th:href="@{/category/dog/fashion}" class="btn btn-brand"
+           style="margin-top:1rem;display:inline-block;">
+          Browse All
+        </a>
+      </div>
+
+      <div th:unless="${products.empty}" class="product-grid">
+        <div th:each="product : ${products}" class="product-card">
+
+          <a th:href="@{/products/{id}(id=${product.id})}">
+            <div class="product-img-wrap img-bg-purple">
+              <img th:if="${product.imageUrl != null}"
+                   th:src="@{${product.imageUrl}}"
+                   th:alt="${product.name}"
+                   onerror="this.src='/images/placeholder.png'"/>
+              <span th:if="${product.imageUrl == null}"
+                    class="product-img-placeholder">🐾</span>
+            </div>
+            <div class="product-body">
+              <span class="product-tag tag-food"
+                    th:text="${product.category?.name}">Tag</span>
+              <p class="product-name" th:text="${product.name}">Name</p>
+              <p class="product-price"
+                 th:text="'₹' + ${product.price}">₹0</p>
+            </div>
+          </a>
+
+          <div style="padding:0 1rem 1rem;">
+            <form method="post" th:action="@{/cart/add}">
+              <input type="hidden" name="productId" th:value="${product.id}"/>
+              
+              <button type="submit"
+                      class="btn-add btn-add-purple"
+                      style="width:100%;">
+                Add to cart
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ========================================scripts for filters===================================== -->
+<script th:src="@{/js/dogfashion.js}" defer></script>
+
+</body>
+</html>

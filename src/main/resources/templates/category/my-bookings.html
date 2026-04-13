@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Bookings - Supertails</title>
+  <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/health.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="booking-confirm-wrap">
+
+    <h2 class="booking-confirm-title">My Bookings</h2>
+
+    <!-- Empty state -->
+    <div th:if="${bookings.empty}"
+         style="text-align:center;padding:3rem;color:var(--text-muted);">
+      <p style="font-size:3rem;">📋</p>
+      <p style="margin-top:1rem;">You have no bookings yet.</p>
+      <a th:href="@{/category/dog/health(section='clinic')}"
+         class="btn-view-bookings"
+         style="display:inline-block;margin-top:1.5rem;">
+        Book a service
+      </a>
+    </div>
+
+    <!-- Bookings list -->
+    <div th:unless="${bookings.empty}">
+      <div th:each="booking : ${bookings}" class="booking-summary-card"
+           style="margin-bottom:1rem;">
+
+        <div class="booking-row">
+          <span class="booking-label">Booking ID</span>
+          <span class="booking-value" th:text="'#' + ${booking.id}">#1</span>
+        </div>
+        <div class="booking-row">
+          <span class="booking-label">Service</span>
+          <span class="booking-value" th:text="${booking.serviceName}">Consultation</span>
+        </div>
+        <div class="booking-row">
+          <span class="booking-label">Category</span>
+          <span class="booking-value" th:text="${booking.serviceCategory}">General</span>
+        </div>
+        <div class="booking-row">
+          <span class="booking-label">Clinic</span>
+          <span class="booking-value" th:text="${booking.clinicName}">Koramangala</span>
+        </div>
+        <div class="booking-row">
+          <span class="booking-label">Address</span>
+          <span class="booking-value" th:text="${booking.clinicAddress}">156...</span>
+        </div>
+        <div class="booking-row booking-price-row">
+          <span class="booking-label">Price</span>
+          <span class="booking-price" th:text="'₹' + ${booking.price}">₹399</span>
+        </div>
+        <div class="booking-row">
+          <span class="booking-label">Status</span>
+          <span class="booking-status-badge"
+                th:classappend="${booking.status.name() == 'CANCELLED'} ? 'cancelled' : ''"
+                th:text="${booking.status}">CONFIRMED</span>
+        </div>
+        <div class="booking-row">
+          <span class="booking-label">Booked at</span>
+          <span class="booking-value"
+                th:text="${#temporals.format(booking.bookedAt, 'dd MMM yyyy, hh:mm a')}">
+            01 Jan 2025
+          </span>
+        </div>
+
+      </div>
+
+      <div style="text-align:center;margin-top:1.5rem;">
+        <a th:href="@{/}" class="booking-back-link">← Back to home</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

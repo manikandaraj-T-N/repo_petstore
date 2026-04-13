@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Orders - Supertails</title>
+  <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/orders.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+<div class="orders-wrap">
+
+  <h1 class="orders-title">My Orders</h1>
+
+  <!-- Empty State -->
+  <div th:if="${orders.empty}"
+       style="text-align:center;padding:4rem 2rem;color:var(--text-muted);">
+    <p style="font-size:3rem;">📦</p>
+    <p style="font-size:1rem;margin:1rem 0;">You have no orders yet.</p>
+    <a th:href="@{/products}"
+       style="display:inline-block;margin-top:0.5rem;padding:0.75rem 2rem;
+              background:var(--brand);color:white;border-radius:10px;
+              font-weight:600;">
+      Start Shopping
+    </a>
+  </div>
+
+  <!-- Orders List -->
+  <div th:unless="${orders.empty}">
+    <div th:each="order : ${orders}" class="order-card">
+
+      <!-- Card Header -->
+      <div class="order-card-header">
+        <div>
+          <p class="order-id" th:text="'Order #' + ${order.id}">Order #1</p>
+          <p class="order-date"
+             th:text="${#temporals.format(order.placedAt, 'dd MMM yyyy, hh:mm a')}">
+            Date
+          </p>
+        </div>
+        <span th:text="${order.status}"
+              th:class="'badge badge-' + ${order.status.name().toLowerCase()}">
+          PENDING
+        </span>
+      </div>
+
+      <!-- Card Body -->
+      <div class="order-card-body">
+        <div class="order-items-preview">
+          <span>🛍</span>
+          <span th:text="${order.items.size()} + ' item(s)'">1 item(s)</span>
+        </div>
+
+        <span class="order-total"
+              th:text="'₹' + ${#numbers.formatDecimal(order.totalAmount, 1, 2)}">
+          ₹0
+        </span>
+
+        <div class="order-actions">
+          <a th:href="@{/orders/{id}(id=${order.id})}"
+             style="padding:0.5rem 1.25rem;background:var(--brand);
+                    color:white;border-radius:8px;font-size:0.85rem;
+                    font-weight:600;">
+            Track Order
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div>
+</body>
+</html>

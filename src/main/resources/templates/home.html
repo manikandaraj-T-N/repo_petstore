@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+
+
+ 
+  <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
+  <link rel="stylesheet" th:href="@{/css/buttons.css}"/>
+
+  <link rel="stylesheet" th:href="@{/css/home.css}"/>
+</head>
+
+
+
+<body>
+<div layout:fragment="content">
+
+  <!-- ─── Hero Banner ─── -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-tag">India's #1 Pet Store</span>
+      <h1>Everything Your<br/><span class="green">Pet Deserves</span></h1>
+      <p>Food, treats, accessories, vet consults & more — delivered to your door.</p>
+      <div class="hero-actions">
+        <a th:href="@{/products}" class="btn-primary">Shop Now</a>
+        <a th:href="@{/services}" class="btn-outline">Consult a Vet</a>
+      </div>
+    </div>
+    <div class="hero-image">
+       <img th:src="@{/images/hero-pet.jpg}"
+       alt="Happy pets"
+      />
+    </div>
+  </section>
+
+  <!-- ─── Category Cards ─── -->
+  <section class="section">
+    <h2 class="section-title">Choose Your  Favourite</h2>
+    <div class="category-grid">
+      <a th:href="@{/category/dog}" class="category-card dog">
+        <div class="cat-img"><img th:src="@{/images/dog.jpg}" alt="Dogs"></div>
+        <span>Dogs</span>
+      </a>
+      <a th:href="@{/category/cat}" class="category-card cat">
+        <div class="cat-img"><img th:src="@{/images/cat.jpg}" alt="Cats"></div>
+        <span>Cats</span>
+      </a>
+   
+      <!-- <a th:href="@{/category/parent}" class="category-card parent">
+        <div class="cat-img"><img th:src="@{/images/pet-parent.jpg}" alt="Pet Parent"></div>
+        <span>Pet Parent</span>
+      </a> -->
+   <a th:href="@{/category/fish/food}" class="category-card fish">
+        <div class="cat-img"><img th:src="@{/images/Fish.jpg}" alt="Fish"></div>
+        <span>Fish</span>
+      </a>
+      <a th:href="@{/category/rabbit/food}" class="category-card rabbit">
+        <div class="cat-img"><img th:src="@{/images/rabbit.jpg}" alt="Rabbits"></div>
+        <span>Rabbits</span>
+      </a>
+        <a th:href="@{/category/bird/food}" class="category-card bird">
+        <div class="cat-img"><img th:src="@{/images/birds.jpg}" alt="Birds"></div>
+        <span>Birds</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ─── Featured Products ─── -->
+  <section class="section bg-light">
+    <h2 class="section-title">Featured Products</h2>
+    <div class="product-grid" th:if="${featuredProducts != null}">
+      <div th:each="product : ${featuredProducts}" class="product-card">
+        <div class="product-img">
+          <img th:src="${product.imageUrl}" th:alt="${product.name}" alt=""
+               onerror="this.src='/images/placeholder.png'"/>
+        </div>
+        <div class="product-info">
+          <p class="product-category" th:text="${product.category != null ? product.category.name : 'Category'}">Category</p>
+          <h3 th:text="${product.name}">Product Name</h3>
+          <div class="product-footer">
+            <span class="price" th:text="'₹' + ${product.price}">₹0</span>
+            <form method="post" th:action="@{/cart/add}">
+              <input type="hidden" name="productId" th:value="${product.id}"/>
+             
+              <button type="submit" class="btn-cart">Add to Cart</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div th:if="${featuredProducts == null or featuredProducts.empty}" class="empty-state">
+      <p>No products yet. <a th:href="@{/admin/products}">Add some from admin.</a></p>
+    </div>
+    <div class="center">
+      <a th:href="@{/products}" class="btn-primary">View All Products →</a>
+    </div>
+  </section>
+
+  <!-- ─── Why Supertails ─── -->
+  <section class="section">
+    <h2 class="section-title">Why Supertails?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🚚</div>
+        <h3>Fast Delivery</h3>
+        <p>Same-day & next-day delivery available in select cities.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✅</div>
+        <h3>100% Authentic</h3>
+        <p>All products are sourced directly from brands.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🩺</div>
+        <h3>Expert Vet Advice</h3>
+        <p>Online vet consultations available 24/7.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <h3>Best Prices</h3>
+        <p>Lowest prices guaranteed with regular offers.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

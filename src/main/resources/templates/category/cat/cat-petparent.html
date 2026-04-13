@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Parent - Supertails</title>
+  <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/buttons.css}"/>
+  <link rel="stylesheet" th:href="@{/css/products.css}"/>
+  <link rel="stylesheet" th:href="@{/css/category.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+
+  <div class="shop-layout">
+
+    <!-- ─── Sidebar ─── -->
+   <aside class="shop-sidebar">
+  <div style="display:flex;align-items:center;
+              justify-content:space-between;margin-bottom:1rem;">
+    <span style="font-weight:700;font-size:0.95rem;">FILTERS</span>
+    <a th:href="@{/category/dog/petparent}"
+       style="font-size:0.8rem;color:var(--brand);font-weight:600;">
+      Hide ✕
+    </a>
+  </div>
+
+  <!-- Hidden inputs to preserve URL params -->
+  <input type="hidden" id="currentSection" th:value="${section}"/>
+  <input type="hidden" id="currentCategoryId" th:value="${selectedCategory}"/>
+
+  <!-- Price Range -->
+  <div class="filter-group">
+    <p class="filter-group-title">Price</p>
+    <input type="range" id="price-range-slider" min="0" max="5000"
+           th:value="${maxPrice}"
+           style="width:100%;accent-color:var(--brand);"/>
+    <div style="display:flex;justify-content:space-between;
+                font-size:0.75rem;color:var(--text-muted);margin-top:4px;">
+      <span>₹0</span>
+      <span id="price-max-label"
+            th:text="'₹' + ${#numbers.formatInteger(maxPrice, 0, 'COMMA')}">₹5,000</span>
+    </div>
+  </div>
+
+  <!-- Brand Filter -->
+  <div class="filter-group">
+    <p class="filter-group-title">Brand</p>
+    <label class="filter-check" th:each="entry : ${brandCountMap}">
+      <input type="checkbox" name="brand"
+             th:value="${entry.key}"
+             th:checked="${param.brand != null and param.brand.contains(entry.key)}"/>
+      <span th:text="${entry.key}">Brand</span>
+      <span class="filter-count"
+            th:text="'(' + ${entry.value} + ')'"></span>
+    </label>
+  </div>
+
+
+ <!-- Category Filter -->
+<div class="filter-group">
+    <p class="filter-group-title">Category <span class="filter-arrow">▾</span></p>
+
+    <label class="filter-check" onclick="location.href='/category/dog/petparent?section=tshirts&categoryId=76'">
+        <input type="checkbox" th:checked="${section == 'tshirts'}" onclick="event.stopPropagation()"/>
+        <span>Tshirts</span>
+    </label>
+    <label class="filter-check" onclick="location.href='/category/dog/petparent?section=keychains&categoryId=77'">
+        <input type="checkbox" th:checked="${section == 'keychains'}" onclick="event.stopPropagation()"/>
+        <span>Key Chains</span>
+    </label>
+    <label class="filter-check" onclick="location.href='/category/dog/petparent?section=charms&categoryId=78'">
+        <input type="checkbox" th:checked="${section == 'charms'}" onclick="event.stopPropagation()"/>
+        <span>Charms</span>
+    </label>
+    <label class="filter-check" onclick="location.href='/category/dog/petparent?section=coasters&categoryId=79'">
+        <input type="checkbox" th:checked="${section == 'coasters'}" onclick="event.stopPropagation()"/>
+        <span>Coasters</span>
+    </label>
+    <label class="filter-check" onclick="location.href='/category/dog/petparent?section=accessories&categoryId=80'">
+        <input type="checkbox" th:checked="${section == 'accessories'}" onclick="event.stopPropagation()"/>
+        <span>Accessories</span>
+    </label>
+    <label class="filter-check" onclick="location.href='/category/dog/petparent?section=mugs&categoryId=81'">
+        <input type="checkbox" th:checked="${section == 'mugs'}" onclick="event.stopPropagation()"/>
+        <span>Mugs</span>
+    </label>
+    <label class="filter-check" onclick="location.href='/category/dog/petparent?section=plants&categoryId=82'">
+        <input type="checkbox" th:checked="${section == 'plants'}" onclick="event.stopPropagation()"/>
+        <span>Pet-safe Plants</span>
+    </label>
+    <label class="filter-check" onclick="location.href='/category/dog/petparent?section=carry&categoryId=83'">
+        <input type="checkbox" th:checked="${section == 'carry'}" onclick="event.stopPropagation()"/>
+        <span>Everyday Carry</span>
+    </label>
+</div>
+</aside>
+
+    <!-- ─── Main Content ─── -->
+    <div class="shop-main">
+
+      <!-- ─── Category Pills ─── -->
+  <div class="food-type-pills">
+
+  <a th:href="@{/category/dog/petparent}"
+     th:classappend="${section == null} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/dogs/petparent/tshirt1.jpg}"
+         onerror="this.src='/images/placeholder.png'" alt="All Pet Parent"/>
+    <span>All</span>
+  </a>
+
+  <a th:href="@{/category/dog/petparent(section='tshirts', categoryId=76)}"
+     th:classappend="${selectedCategory == 76} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/dogs/petparent/tshirt1.jpg}"
+         onerror="this.src='/images/placeholder.png'" alt="Tshirts"/>
+    <span>Tshirts</span>
+  </a>
+
+  <a th:href="@{/category/dog/petparent(section='keychains', categoryId=77)}"
+     th:classappend="${selectedCategory == 77} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/dogs/petparent/keychain1.jpg}"
+         onerror="this.src='/images/placeholder.png'" alt="Key Chains"/>
+    <span>Key Chains</span>
+  </a>
+
+  <a th:href="@{/category/dog/petparent(section='charms', categoryId=78)}"
+     th:classappend="${selectedCategory == 78} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/dogs/petparent/charms1.jpg}"
+         onerror="this.src='/images/placeholder.png'" alt="Charms"/>
+    <span>Charms</span>
+  </a>
+
+  <a th:href="@{/category/dog/petparent(section='coasters', categoryId=79)}"
+     th:classappend="${selectedCategory == 79} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/dogs/petparent/coasters1.jpg}"
+         onerror="this.src='/images/placeholder.png'" alt="Coasters"/>
+    <span>Coasters</span>
+  </a>
+
+  <a th:href="@{/category/dog/petparent(section='accessories', categoryId=80)}"
+     th:classappend="${selectedCategory == 80} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/dogs/petparent/accessories1.jpg}"
+         onerror="this.src='/images/placeholder.png'" alt="Accessories"/>
+    <span>Accessories</span>
+  </a>
+
+  <a th:href="@{/category/dog/petparent(section='mugs', categoryId=81)}"
+     th:classappend="${selectedCategory == 81} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/dogs/petparent/mugs1.jpg}"
+         onerror="this.src='/images/placeholder.png'" alt="Mugs"/>
+    <span>Mugs</span>
+  </a>
+
+  <a th:href="@{/category/dog/petparent(section='plants', categoryId=82)}"
+     th:classappend="${selectedCategory == 82} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/dogs/petparent/plants1.jpg}"
+         onerror="this.src='/images/placeholder.png'" alt="Pet-safe Plants"/>
+    <span>Pet-safe Plants</span>
+  </a>
+
+  <a th:href="@{/category/dog/petparent(section='carry', categoryId=83)}"
+     th:classappend="${selectedCategory == 83} ? ' active' : ''"
+     class="food-pill">
+    <img th:src="@{/images/category/dogs/petparent/everyday1.jpg}"
+         onerror="this.src='/images/placeholder.png'" alt="Everyday Carry"/>
+    <span>Everyday Carry</span>
+  </a>
+
+</div>
+
+      <!-- ─── Product Grid ─── -->
+      <div th:if="${section != null}">
+
+        <div th:if="${products.empty}"
+             style="text-align:center;padding:3rem;color:var(--text-muted);">
+          <p style="font-size:3rem;">🔍</p>
+          <p>No products found. Try a different filter.</p>
+          <a th:href="@{/category/dog/petparent}" class="btn btn-brand"
+             style="margin-top:1rem;display:inline-block;">Browse All</a>
+        </div>
+
+        <p th:unless="${products.empty}"
+           style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;"
+           th:text="${products.size()} + ' products'">0 products</p>
+
+        <div th:unless="${products.empty}" class="product-grid">
+          <div th:each="product : ${products}" class="product-card">
+            <a th:href="@{/products/{id}(id=${product.id})}">
+              <div class="product-img-wrap img-bg-pink">
+                <img th:if="${product.imageUrl != null}"
+                     th:src="${product.imageUrl}"
+                     th:alt="${product.name}"
+                     onerror="this.src='/images/placeholder.png'"/>
+                <span th:if="${product.imageUrl == null}"
+                      class="product-img-placeholder">🐾</span>
+              </div>
+              <div class="product-body">
+                <span class="product-tag tag-petparent"
+                      th:text="${product.category?.name}">Tag</span>
+                <p class="product-name" th:text="${product.name}">Name</p>
+                <p class="product-price" th:text="'₹' + ${product.price}">₹0</p>
+              </div>
+            </a>
+            <div style="padding:0 1rem 1rem;">
+              <form method="post" th:action="@{/cart/add}">
+                <input type="hidden" name="productId" th:value="${product.id}"/>
+                <!-- <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}"/> -->
+                <button type="submit" class="btn-add btn-add-pink" style="width:100%;">
+                  Add to cart
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ─── Default view when no section selected: show all products ─── -->
+      <div th:if="${section == null}">
+
+        <div th:if="${products.empty}"
+             style="text-align:center;padding:3rem;color:var(--text-muted);">
+          <p style="font-size:3rem;">🐾</p>
+          <p>No products found.</p>
+        </div>
+
+        <p th:unless="${products.empty}"
+           style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;"
+           th:text="${products.size()} + ' products'">0 products</p>
+
+        <div th:unless="${products.empty}" class="product-grid">
+          <div th:each="product : ${products}" class="product-card">
+            <a th:href="@{/products/{id}(id=${product.id})}">
+              <div class="product-img-wrap img-bg-pink">
+                <img th:if="${product.imageUrl != null}"
+                     th:src="${product.imageUrl}"
+                     th:alt="${product.name}"
+                     onerror="this.src='/images/placeholder.png'"/>
+                <span th:if="${product.imageUrl == null}"
+                      class="product-img-placeholder">🐾</span>
+              </div>
+              <div class="product-body">
+                <span class="product-tag tag-petparent"
+                      th:text="${product.category?.name}">Tag</span>
+                <p class="product-name" th:text="${product.name}">Name</p>
+                <p class="product-price" th:text="'₹' + ${product.price}">₹0</p>
+              </div>
+            </a>
+            <div style="padding:0 1rem 1rem;">
+              <form method="post" th:action="@{/cart/add}">
+                <input type="hidden" name="productId" th:value="${product.id}"/>
+               
+                <button type="submit" class="btn-add btn-add-pink" style="width:100%;">
+                  Add to cart
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/dogparent.js}" defer></script>
+</th:block>
+ 
+</body>
+</html>

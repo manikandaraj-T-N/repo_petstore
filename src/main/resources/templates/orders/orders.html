@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}" lang="en">
+<head>
+  <title>Order Confirmed - Supertails</title>
+  <link rel="stylesheet" th:href="@{/css/variables.css}"/>
+  <link rel="stylesheet" th:href="@{/css/cart.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="checkout-wrap" style="max-width:700px;margin:2rem auto;padding:0 1rem;">
+
+    <!-- Success Banner -->
+    <div th:if="${param.success}"
+         style="background:#dcfce7;border:1px solid #86efac;border-radius:12px;
+                padding:1.25rem 1.5rem;margin-bottom:1.5rem;
+                display:flex;align-items:center;gap:12px;">
+      <span style="font-size:2rem;">🎉</span>
+      <div>
+        <p style="font-weight:700;color:#166534;font-size:1rem;">Order Placed Successfully!</p>
+        <p style="font-size:0.85rem;color:#166534;">
+          Your order <strong th:text="'#' + ${order.id}">#1</strong>
+          has been confirmed. We'll deliver it soon!
+        </p>
+      </div>
+    </div>
+
+    <!-- Order Info Card -->
+    <div style="background:white;border:1px solid var(--border);
+                border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;">
+
+      <div style="display:flex;justify-content:space-between;
+                  align-items:center;margin-bottom:1.25rem;">
+        <h2 style="font-size:1.1rem;font-weight:700;color:var(--dark);">
+          Order <span th:text="'#' + ${order.id}">#1</span>
+        </h2>
+        <span style="background:var(--brand-pale);color:var(--brand);
+                     font-size:0.78rem;font-weight:700;
+                     padding:4px 12px;border-radius:20px;"
+              th:text="${order.status}">PENDING</span>
+      </div>
+
+      <!-- Order Meta -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;
+                  gap:0.75rem;margin-bottom:1.25rem;
+                  font-size:0.85rem;color:var(--text-muted);">
+        <div>
+          <p style="font-weight:600;color:var(--dark);margin-bottom:2px;">Shipping Address</p>
+          <p th:text="${order.shippingAddress}">Address</p>
+        </div>
+        <div>
+          <p style="font-weight:600;color:var(--dark);margin-bottom:2px;">Payment Method</p>
+          <p>Cash on Delivery</p>
+        </div>
+        <div>
+          <p style="font-weight:600;color:var(--dark);margin-bottom:2px;">Order Date</p>
+          <p th:text="${#temporals.format(order.createdAt, 'dd MMM yyyy, hh:mm a')}">Date</p>
+        </div>
+        <div>
+          <p style="font-weight:600;color:var(--dark);margin-bottom:2px;">Total Items</p>
+          <p th:text="${order.items.size()} + ' items'"">0 items</p>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <hr style="border:none;border-top:1px solid var(--border);margin-bottom:1.25rem;"/>
+
+      <!-- Order Items -->
+      <p style="font-weight:700;font-size:0.9rem;
+                color:var(--dark);margin-bottom:0.75rem;">Items Ordered</p>
+
+      <div th:each="item : ${order.items}"
+           style="display:flex;justify-content:space-between;
+                  align-items:center;padding:0.75rem 0;
+                  border-bottom:1px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <img th:if="${item.product.imageUrl != null}"
+               th:src="${item.product.imageUrl}"
+               onerror="this.src='/images/placeholder.png'"
+               style="width:50px;height:50px;object-fit:contain;
+                      border-radius:8px;background:#f5f3ff;padding:4px;"/>
+          <div>
+            <p style="font-size:0.88rem;font-weight:600;
+                      color:var(--dark);" th:text="${item.product.name}">Product</p>
+            <p style="font-size:0.78rem;color:var(--text-muted);"
+               th:text="'Qty: ' + ${item.quantity}">Qty: 1</p>
+          </div>
+        </div>
+        <p style="font-weight:700;color:var(--dark);"
+           th:text="'₹' + ${#numbers.formatDecimal(item.subtotal,1,2)}">₹0</p>
+      </div>
+
+      <!-- Total -->
+      <div style="display:flex;justify-content:space-between;
+                  align-items:center;margin-top:1rem;
+                  padding-top:1rem;border-top:2px solid var(--border);">
+        <span style="font-weight:700;font-size:1rem;">Total Paid</span>
+        <span style="font-weight:800;font-size:1.1rem;color:var(--brand);"
+              th:text="'₹' + ${#numbers.formatDecimal(order.totalPrice,1,2)}">₹0</span>
+      </div>
+
+    </div>
+
+    <!-- Actions -->
+    <div style="display:flex;gap:1rem;">
+      <a th:href="@{/orders}"
+         style="flex:1;text-align:center;padding:0.85rem;
+                border:1.5px solid var(--brand);color:var(--brand);
+                border-radius:10px;font-weight:600;font-size:0.9rem;">
+        My Orders
+      </a>
+      <a th:href="@{/}"
+         style="flex:1;text-align:center;padding:0.85rem;
+                background:var(--brand);color:white;
+                border-radius:10px;font-weight:600;font-size:0.9rem;">
+        Continue Shopping
+      </a>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

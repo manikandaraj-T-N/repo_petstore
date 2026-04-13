@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users - Supertails</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="admin-layout">
+    <aside class="sidebar">
+        <h2>🐾 Supertails</h2>
+        <nav>
+            <a th:href="@{/admin}">Dashboard</a>
+            <a th:href="@{/admin/products}">Products</a>
+            <a th:href="@{/admin/orders}">Orders</a>
+            <a th:href="@{/admin/users}">Users</a>
+            <a th:href="@{/logout}">Logout</a>
+        </nav>
+    </aside>
+
+    <main class="admin-main">
+        <h1>All Users</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                    <th>Joined</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}">1</td>
+                    <td th:text="${user.name}">Name</td>
+                    <td th:text="${user.email}">Email</td>
+                    <td th:text="${user.phone}">Phone</td>
+                    <td>
+                        <span th:text="${user.role}"
+                              th:classappend="${user.role.name() == 'ADMIN'} ? 'badge-red' : 'badge-blue'">
+                        </span>
+                    </td>
+                    <td th:text="${#temporals.format(user.createdAt, 'dd MMM yyyy')}">Date</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</div>
+</body>
+</html>
