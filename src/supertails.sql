@@ -3,6 +3,8 @@ use supertails;
 
 show tables;
 
+select * from categories;
+
 
 -- ─── Categories ───
 INSERT IGNORE INTO categories (id, name, description) VALUES
